@@ -8,5 +8,11 @@ namespace Salvo.Models
 {
     public class SalvoContex : DbContext
     {
+        public SalvoContex(DbContextOptions<SalvoContex> opt) : base(opt)
+        {
+
+        }
+
+        public DbSet<Player> Players { get; set; }
     }
 }

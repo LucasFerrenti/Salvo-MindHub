@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Salvo.Models;
 
 namespace Salvo
 {
@@ -24,6 +26,7 @@ namespace Salvo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddDbContext<SalvoContex>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SalvoDB")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
