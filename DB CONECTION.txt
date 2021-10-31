@@ -1,1 +1,0 @@
-Server=localhostSQLEXPRESS;Database=master;Trusted_Connection=True;
