@@ -8,6 +8,6 @@ namespace Salvo.Models
     public class Game
     {
         public long Id { get; set; }
-        public DateTime fechaDeCreacion { get; set; }
+        public DateTime? CreationDate { get; set; }
     }
 }
