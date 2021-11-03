@@ -47,6 +47,27 @@ namespace Salvo.Models
                 //Save Contex
                 contex.SaveChanges();
             }
+            
+            if (!contex.Games.Any())
+            {
+                DateTime time = DateTime.Now;
+                Game[] games = new Game[]
+                {
+                    new Game { CreationDate = time},
+                    new Game { CreationDate = time = time.AddHours(1) },
+                    new Game { CreationDate = time = time.AddHours(1) },
+                    new Game { CreationDate = time = time.AddHours(1) },
+                    new Game { CreationDate = time = time.AddHours(1) },
+                    new Game { CreationDate = time = time.AddHours(1) },
+                    new Game { CreationDate = time = time.AddHours(1) },
+                    new Game { CreationDate = time = time.AddHours(1) }
+                };
+                foreach (var g in games)
+                {
+                    contex.Games.Add(g);
+                }
+                contex.SaveChanges();
+            }
         }
     }
 }

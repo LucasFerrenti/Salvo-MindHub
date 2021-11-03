@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Salvo.Models;
+using Salvo.Repositories;
 
 namespace Salvo
 {
@@ -26,7 +27,12 @@ namespace Salvo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            //injeccion de dependencia salvocontext
             services.AddDbContext<SalvoContex>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SalvoDB")));
+            //injeccion réposotorio game
+            services.AddScoped<IGameRepository, GameRepository>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +59,9 @@ namespace Salvo
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=games}/{ action = Get}");
             });
         }
     }
