@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Salvo.Models;
 
 namespace Salvo.Migrations
 {
     [DbContext(typeof(SalvoContex))]
-    partial class SalvoContexModelSnapshot : ModelSnapshot
+    [Migration("20211103230754_AddGamePlayerEntity")]
+    partial class AddGamePlayerEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,12 @@ namespace Salvo.Migrations
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<long?>("GamePlayerId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("GamePlayerId");
 
                     b.ToTable("Games");
                 });
@@ -52,11 +59,7 @@ namespace Salvo.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GameID");
-
-                    b.HasIndex("PlayerID");
-
-                    b.ToTable("GamePlayers");
+                    b.ToTable("GamePlayer");
                 });
 
             modelBuilder.Entity("Salvo.Models.Player", b =>
@@ -69,6 +72,9 @@ namespace Salvo.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("GamePlayerId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -77,36 +83,34 @@ namespace Salvo.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GamePlayerId");
+
                     b.ToTable("Players");
-                });
-
-            modelBuilder.Entity("Salvo.Models.GamePlayer", b =>
-                {
-                    b.HasOne("Salvo.Models.Game", "Game")
-                        .WithMany("GamePlayer")
-                        .HasForeignKey("GameID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Salvo.Models.Player", "Player")
-                        .WithMany("GamePlayer")
-                        .HasForeignKey("PlayerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-
-                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("Salvo.Models.Game", b =>
                 {
+                    b.HasOne("Salvo.Models.GamePlayer", "GamePlayer")
+                        .WithMany("Games")
+                        .HasForeignKey("GamePlayerId");
+
                     b.Navigation("GamePlayer");
                 });
 
             modelBuilder.Entity("Salvo.Models.Player", b =>
                 {
+                    b.HasOne("Salvo.Models.GamePlayer", "GamePlayer")
+                        .WithMany("Players")
+                        .HasForeignKey("GamePlayerId");
+
                     b.Navigation("GamePlayer");
+                });
+
+            modelBuilder.Entity("Salvo.Models.GamePlayer", b =>
+                {
+                    b.Navigation("Games");
+
+                    b.Navigation("Players");
                 });
 #pragma warning restore 612, 618
         }

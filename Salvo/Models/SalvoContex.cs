@@ -10,10 +10,10 @@ namespace Salvo.Models
     {
         public SalvoContex(DbContextOptions<SalvoContex> opt) : base(opt)
         {
-
         }
 
         public DbSet<Player> Players { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<GamePlayer> GamePlayers { get; set; }
     }
 }
