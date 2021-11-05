@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Salvo.Models;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Salvo.Repositories
 {
@@ -34,6 +35,18 @@ namespace Salvo.Repositories
         public void Delete(T entity)
         {
             this.RepositoryContext.Set<T>().Remove(entity);
+        }
+
+        public IQueryable<T> FindAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        {
+            IQueryable<T> queryable = this.RepositoryContext.Set<T>();
+
+            if (includes != null)
+            {
+                queryable = includes(queryable);
+            }
+
+            return queryable.AsNoTracking();
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Salvo.Repositories
     public interface IGameRepository
     {
         IEnumerable<Game> GetAllGames();
-        //IEnumerable<Game> GetAllGamesWithPlayers();
+        IEnumerable<Game> GetAllGamesWithPlayers();
     }
 }

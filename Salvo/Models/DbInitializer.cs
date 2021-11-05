@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Salvo.Models;
 
 namespace Salvo.Models
 {
@@ -74,23 +75,37 @@ namespace Salvo.Models
 
             if (!contex.GamePlayers.Any())
             {
+                Game game1 = contex.Games.Find(1L);
+                Game game2 = contex.Games.Find(2L);
+                Game game3 = contex.Games.Find(3L);
+                Game game4 = contex.Games.Find(4L);
+                Game game5 = contex.Games.Find(5L);
+                Game game6 = contex.Games.Find(6L);
+                Game game7 = contex.Games.Find(7L);
+                Game game8 = contex.Games.Find(8L);
+
+                Player player1 = contex.Players.Find(1L);
+                Player player2 = contex.Players.Find(2L);
+                Player player3 = contex.Players.Find(3L);
+                Player player4 = contex.Players.Find(4L);
+
                 // Create Instance of GP
                 GamePlayer[] gamePlayers = new GamePlayer[]
-                {
-                    new GamePlayer { GameID = 1, PlayerID = 1, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 1, PlayerID = 2, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 2, PlayerID = 1, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 2, PlayerID = 2, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 3, PlayerID = 2, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 3, PlayerID = 4, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 4, PlayerID = 2, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 4, PlayerID = 1, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 5, PlayerID = 4, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 5, PlayerID = 1, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 6, PlayerID = 3, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 7, PlayerID = 4, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 8, PlayerID = 3, JoinDate = DateTime.Now },
-                    new GamePlayer { GameID = 8, PlayerID = 4, JoinDate = DateTime.Now },
+                {                    
+                    new GamePlayer { Game = game1, Player = player1, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game1, Player = player2, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game2, Player = player1, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game2, Player = player2, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game3, Player = player2, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game3, Player = player4, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game4, Player = player2, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game4, Player = player1, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game5, Player = player4, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game5, Player = player1, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game6, Player = player3, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game7, Player = player4, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game8, Player = player3, JoinDate = DateTime.Now },
+                    new GamePlayer { Game = game8, Player = player4, JoinDate = DateTime.Now },
                 };
                 //Add Contex
                 foreach (var gp in gamePlayers)
@@ -99,7 +114,7 @@ namespace Salvo.Models
                 }
                 //Save Contex
                 contex.SaveChanges();
-            }   
+            }
         }
     }
 }
