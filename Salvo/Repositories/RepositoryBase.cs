@@ -46,7 +46,7 @@ namespace Salvo.Repositories
                 queryable = includes(queryable);
             }
 
-            return queryable.AsNoTracking();
+            return queryable.AsNoTrackingWithIdentityResolution();
         }
     }
 }

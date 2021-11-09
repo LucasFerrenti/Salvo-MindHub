@@ -16,5 +16,8 @@ namespace Salvo.Models
         public DbSet<Player> Players { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<GamePlayer> GamePlayers { get; set; }
+        public DbSet<Ship> Ships { get; set; }
+        public DbSet<ShipLocation> ShipLocations { get; set; }
+
     }
 }

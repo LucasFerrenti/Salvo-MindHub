@@ -31,6 +31,8 @@ namespace Salvo
             services.AddDbContext<SalvoContex>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SalvoDB")));
             //injeccion réposotorio game
             services.AddScoped<IGameRepository, GameRepository>();
+            //injeccion réposotorio gameplayer
+            services.AddScoped<IGamePlayerRepository, GamePlayerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

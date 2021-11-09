@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Salvo.Models;
 
 namespace Salvo.Migrations
 {
     [DbContext(typeof(SalvoContex))]
-    partial class SalvoContexModelSnapshot : ModelSnapshot
+    [Migration("20211108200451_addShipDBModels")]
+    partial class addShipDBModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,9 +92,6 @@ namespace Salvo.Migrations
                     b.Property<long>("GamePlayerId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GamePlayerId");
@@ -100,14 +99,14 @@ namespace Salvo.Migrations
                     b.ToTable("Ships");
                 });
 
-            modelBuilder.Entity("Salvo.Models.ShipLocation", b =>
+            modelBuilder.Entity("Salvo.Models.ShipLocations", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Location")
+                    b.Property<string>("cell")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("shipId")
@@ -141,19 +140,19 @@ namespace Salvo.Migrations
 
             modelBuilder.Entity("Salvo.Models.Ship", b =>
                 {
-                    b.HasOne("Salvo.Models.GamePlayer", "GamePlayer")
+                    b.HasOne("Salvo.Models.GamePlayer", "GamePlayers")
                         .WithMany("Ships")
                         .HasForeignKey("GamePlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("GamePlayer");
+                    b.Navigation("GamePlayers");
                 });
 
-            modelBuilder.Entity("Salvo.Models.ShipLocation", b =>
+            modelBuilder.Entity("Salvo.Models.ShipLocations", b =>
                 {
                     b.HasOne("Salvo.Models.Ship", "Ships")
-                        .WithMany("Locations")
+                        .WithMany("ShipLocations")
                         .HasForeignKey("shipId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -178,7 +177,7 @@ namespace Salvo.Migrations
 
             modelBuilder.Entity("Salvo.Models.Ship", b =>
                 {
-                    b.Navigation("Locations");
+                    b.Navigation("ShipLocations");
                 });
 #pragma warning restore 612, 618
         }
