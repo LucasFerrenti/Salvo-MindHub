@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Salvo.Models;
 
 namespace Salvo.Migrations
 {
     [DbContext(typeof(SalvoContex))]
-    partial class SalvoContexModelSnapshot : ModelSnapshot
+    [Migration("20211109182906_AddSalvoEntitys")]
+    partial class AddSalvoEntitys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -32,21 +32,39 @@ namespace Salvo.Controllers
                 {
                     Id = gp.Id,
                     CreationDate = gp.Game.CreationDate,
+
                     GamePlayers = gp.Game.GamePlayers.Select(gps => new GamePlayerDTO
                     {
-                        Id = gp.Id,
-                        JoinDate = gp.JoinDate,
+                        Id = gps.Id,
+                        JoinDate = gps.JoinDate,
                         Player = new PlayerDTO
                         {
                             Id = gps.Player.Id,
                             Email = gps.Player.Email
                         }
                     }).ToList(),
+
                     Ships = gp.Ships.Select(s => new ShipDTO 
                     {
                         Id = s.Id,
                         Type = s.Type,
                         Locations = s.Locations.Select(l => new ShipLocationDTO
+                        {
+                            Id = l.Id,
+                            Location = l.Location
+                        }).ToList()
+                    }).ToList(),
+
+                    Salvos = gp.Game.GamePlayers.SelectMany(gps => gps.Salvos).Select(sv => new SalvoDTO
+                    {
+                        Id = sv.Id,
+                        turn = sv.turn,
+                        Player = new PlayerDTO
+                        {
+                            Id = sv.GamePlayer.Player.Id,
+                            Email = sv.GamePlayer.Player.Email
+                        },
+                        Locations = sv.Locations.Select(l => new SalvoLocationDTO
                         {
                             Id = l.Id,
                             Location = l.Location

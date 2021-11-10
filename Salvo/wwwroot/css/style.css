@@ -14,7 +14,7 @@
 .CarrierVertical {
     background-image: url('../img/carrierver.png');
     background-size: 100% 100%;
-    width: 45px !important;
+    width: 42px !important;
 }
 
 .PatroalBoatHorizontal {
@@ -25,7 +25,7 @@
 .PatroalBoatVertical {
     background-image: url('../img/patrolboatver.png');
     background-size: 100% 100%;
-    width: 45px !important;
+    width: 42px !important;
 }
 
 .SubmarineHorizontal {
@@ -36,7 +36,7 @@
 .SubmarineVertical {
     background-image: url('../img/submarinever.png');
     background-size: 100% 100%;
-    width: 45px !important;
+    width: 42px !important;
 }
 
 .DestroyerHorizontal {
@@ -47,7 +47,7 @@
 .DestroyerVertical {
     background-image: url('../img/destroyerver.png');
     background-size: 100% 100%;
-    width: 45px !important;
+    width: 42px !important;
 }
 
 .BattleShipHorizontal {
@@ -58,7 +58,7 @@
 .BattleShipVertical {
     background-image: url('../img/battleshipver.png');
     background-size: 100% 100%;
-    width: 45px !important;
+    width: 42px !important;
 }
 
 
@@ -70,4 +70,41 @@
     background-size: contain;
     padding-left: 42px;
     padding-top: 42px;
+    position: relative;
+}
+
+.salvo-table{
+    border: solid black 1px;
+    background-image: url('../img/backships.gif');
+    background-size: contain;
+}
+
+.salvo-table th{
+    background-color: rgb(213, 213, 213);
+    text-align: center;
+}
+
+.salvo-table .td-info {
+    background-color: rgb(213, 213, 213);
+    text-align: center;
+}
+
+.salvo-table th, .salvo-table td {
+    border: solid black 1px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+
+.shot{
+    background-image: url('../img/targetself.png');
+    background-size: contain;
+}
+
+.hitSelf {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-image: url('../img/hit3.gif');
+    background-size: contain;
 }

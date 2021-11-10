@@ -15,6 +15,7 @@ var app = new Vue({
                 getPlayers(this.gameView, gpId);
                 initializeGrid(this.gameView);
                 placeShips(this.gameView.ships);
+                placeSalvos(this.gameView.salvos, this.player.id, this.gameView.ships)
                 addEvents();
             })
             .catch(error => {
@@ -59,7 +60,17 @@ function initializeGrid(gameview) {
 
 function placeShips(ships) {
     grid = $('#grid').data('gridstack');
+    ships = JSON.parse(JSON.stringify(ships));
     ships.forEach(ship => {
+        ship.locations.sort((a, b) => {
+            if (a.location > b.location)
+                return 1;
+            else if (a.location < b.location)
+                return -1;
+            else
+                return 0;
+        });
+
         var searchChar = ship.locations[0].location.slice(0, 1);
         var secondChar = ship.locations[1].location.slice(0, 1);
         if (searchChar === secondChar) {
@@ -79,7 +90,7 @@ function placeShips(ships) {
             ship.locations[i].location = ship.locations[i].location.replace(/I/g, '8');
             ship.locations[i].location = ship.locations[i].location.replace(/J/g, '9');
         }
-
+        
         var yInGrid = parseInt(ship.locations[0].location.slice(0, 1));
         var xInGrid = parseInt(ship.locations[0].location.slice(1, 3)) - 1;
 
@@ -89,6 +100,42 @@ function placeShips(ships) {
         } else if (ship.position === "Vertical") {
             grid.addWidget($('<div id="' + ship.type + '"><div class="grid-stack-item-content ' + ship.type + 'Vertical"></div><div/>'),
                 xInGrid, yInGrid, 1, ship.locations.length, false);
+        }
+    })
+}
+
+function placeSalvos(salvos, playerId, ships) {
+    salvos = JSON.parse(JSON.stringify(salvos));
+    const shitPositions = [];
+    ships.forEach(ship => ship.locations.forEach(location => { shitPositions.push(location.location) }))
+
+    salvos.forEach(salvo => {
+        if (salvo.player.id == playerId) {
+            salvo.locations.forEach(location => {
+                $('#' + location.location).addClass("shot");
+                $('#' + location.location).text(salvo.turn);
+            })
+        }
+        else {
+            salvo.locations.forEach(location => {
+                if (shitPositions.indexOf(location.location) != -1) {
+                    location.location = location.location.replace(/A/g, '0');
+                    location.location = location.location.replace(/B/g, '1');
+                    location.location = location.location.replace(/C/g, '2');
+                    location.location = location.location.replace(/D/g, '3');
+                    location.location = location.location.replace(/E/g, '4');
+                    location.location = location.location.replace(/F/g, '5');
+                    location.location = location.location.replace(/G/g, '6');
+                    location.location = location.location.replace(/H/g, '7');
+                    location.location = location.location.replace(/I/g, '8');
+                    location.location = location.location.replace(/J/g, '9');
+
+                    console.log(parseInt(location.location.slice(0, 1)))
+                    var yInGrid = (parseInt(location.location.slice(0, 1)) * 40) + 42;
+                    var xInGrid = ((parseInt(location.location.slice(1, 3)) - 1) * 40) + 42;
+                    $('.grid-ships').append('<div class="hitSelf" style="top:' + yInGrid + 'px; left:' + xInGrid + 'px;" ></div>');
+                }
+            })
         }
     })
 }
