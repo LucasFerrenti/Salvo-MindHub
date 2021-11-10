@@ -44,30 +44,30 @@ namespace Salvo.Controllers
                         }
                     }).ToList(),
 
-                    Ships = gp.Ships.Select(s => new ShipDTO 
+                    Ships = gp.Ships.Select(ship => new ShipDTO 
                     {
-                        Id = s.Id,
-                        Type = s.Type,
-                        Locations = s.Locations.Select(l => new ShipLocationDTO
+                        Id = ship.Id,
+                        Type = ship.Type,
+                        Locations = ship.Locations.Select(location => new ShipLocationDTO
                         {
-                            Id = l.Id,
-                            Location = l.Location
+                            Id = location.Id,
+                            Location = location.Location
                         }).ToList()
                     }).ToList(),
 
-                    Salvos = gp.Game.GamePlayers.SelectMany(gps => gps.Salvos).Select(sv => new SalvoDTO
+                    Salvos = gp.Game.GamePlayers.SelectMany(gps => gps.Salvos).Select(salvo => new SalvoDTO
                     {
-                        Id = sv.Id,
-                        turn = sv.turn,
+                        Id = salvo.Id,
+                        turn = salvo.turn,
                         Player = new PlayerDTO
                         {
-                            Id = sv.GamePlayer.Player.Id,
-                            Email = sv.GamePlayer.Player.Email
+                            Id = salvo.GamePlayer.Player.Id,
+                            Email = salvo.GamePlayer.Player.Email
                         },
-                        Locations = sv.Locations.Select(l => new SalvoLocationDTO
+                        Locations = salvo.Locations.Select(location => new SalvoLocationDTO
                         {
-                            Id = l.Id,
-                            Location = l.Location
+                            Id = location.Id,
+                            Location = location.Location
                         }).ToList()
                     }).ToList()
                 };
