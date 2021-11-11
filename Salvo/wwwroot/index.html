@@ -36,6 +36,25 @@
                     </li>
                 </ul>
             </div>
+            <div class="col">
+                <h2>L&iacute;deres</h2>
+                <table class="table table-striped table-dark">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Jugador</th><th>Puntos</th><th>Ganados</th><th>Empatados</th><th>Perdidos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="score in scores">
+                            <td>{{ score.email }}</td>
+                            <td>{{ score.total }}</td>
+                            <td>{{ score.win }}</td>
+                            <td>{{ score.tie }}</td>
+                            <td>{{ score.lost }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     

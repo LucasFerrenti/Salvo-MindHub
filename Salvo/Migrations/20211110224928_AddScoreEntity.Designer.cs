@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Salvo.Models;
 
 namespace Salvo.Migrations
 {
     [DbContext(typeof(SalvoContex))]
-    partial class SalvoContexModelSnapshot : ModelSnapshot
+    [Migration("20211110224928_AddScoreEntity")]
+    partial class AddScoreEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,8 +138,8 @@ namespace Salvo.Migrations
                     b.Property<long>("PlayerId")
                         .HasColumnType("bigint");
 
-                    b.Property<double>("Point")
-                        .HasColumnType("float");
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

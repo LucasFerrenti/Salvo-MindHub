@@ -340,9 +340,6 @@ namespace Salvo.Models
                 GamePlayer gamePlayer8 = context.GamePlayers.Find(8L);
                 GamePlayer gamePlayer9 = context.GamePlayers.Find(9L);
                 GamePlayer gamePlayer10 = context.GamePlayers.Find(10L);
-                GamePlayer gamePlayer11 = context.GamePlayers.Find(11L);
-                GamePlayer gamePlayer12 = context.GamePlayers.Find(12L);
-                GamePlayer gamePlayer13 = context.GamePlayers.Find(13L);
 
                 var Salvos = new Salvo[]
                 {   
@@ -577,6 +574,91 @@ namespace Salvo.Models
                 foreach(var s in Salvos)
                 {
                     context.Salvos.Add(s);
+                }
+                context.SaveChanges();
+            }
+
+            if (!context.Scores.Any())
+            {
+                //Game references
+                Game game1 = context.Games.Find(1L);
+                Game game2 = context.Games.Find(2L);
+                Game game3 = context.Games.Find(3L);
+                Game game4 = context.Games.Find(4L);
+
+                //Player references
+                Player player1 = context.Players.Find(1L);
+                Player player2 = context.Players.Find(2L);
+                Player player3 = context.Players.Find(3L);
+                Player player4 = context.Players.Find(4L);
+
+                var scores = new Score[]
+                {
+                    //G1W
+                    new Score
+                    {
+                        Game = game1,
+                        Player = player1,
+                        Point = 1,
+                        FinishDate = DateTime.Now
+                    },
+                    new Score
+                    {
+                        Game = game1,
+                        Player = player2,
+                        Point = 0,
+                        FinishDate = DateTime.Now
+                    },
+                    //G2T
+                    new Score
+                    {
+                        Game = game2,
+                        Player = player1,
+                        Point = 0.5,
+                        FinishDate = DateTime.Now
+                    },
+                    new Score
+                    {
+                        Game = game2,
+                        Player = player2,
+                        Point = 0.5,
+                        FinishDate = DateTime.Now
+                    },
+                    //G3W
+                    new Score
+                    {
+                        Game = game3,
+                        Player = player2,
+                        Point = 1,
+                        FinishDate = DateTime.Now
+                    },
+                    new Score
+                    {
+                        Game = game3,
+                        Player = player4,
+                        Point = 0,
+                        FinishDate = DateTime.Now
+                    },
+                    //G4T
+                    new Score
+                    {
+                        Game = game4,
+                        Player = player2,
+                        Point = 0.5,
+                        FinishDate = DateTime.Now
+                    },
+                    new Score
+                    {
+                        Game = game4,
+                        Player = player1,
+                        Point = 0.5,
+                        FinishDate = DateTime.Now
+                    }
+                };
+                
+                foreach(var s in scores)
+                {
+                    context.Scores.Add(s);
                 }
                 context.SaveChanges();
             }
