@@ -55,21 +55,21 @@ namespace Salvo.Controllers
                         }).ToList()
                     }).ToList(),
 
-                    Salvos = gp.Game.GamePlayers.SelectMany(gps => gps.Salvos).Select(salvo => new SalvoDTO
+                    Salvos = gp.Game.GamePlayers.SelectMany(gps => gps.Salvos.Select(salvo => new SalvoDTO
                     {
                         Id = salvo.Id,
                         turn = salvo.turn,
                         Player = new PlayerDTO
                         {
-                            Id = salvo.GamePlayer.Player.Id,
-                            Email = salvo.GamePlayer.Player.Email
+                            Id = gps.Player.Id,
+                            Email = gps.Player.Email
                         },
                         Locations = salvo.Locations.Select(location => new SalvoLocationDTO
                         {
                             Id = location.Id,
                             Location = location.Location
                         }).ToList()
-                    }).ToList()
+                    })).ToList()
                 };
                 return Ok(gameView);
             }

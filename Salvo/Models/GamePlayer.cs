@@ -16,5 +16,11 @@ namespace Salvo.Models
         public Player Player { get; set; }
         public ICollection<Ship> Ships { get; set; }
         public ICollection<Salvo> Salvos { get; set; }
+
+        public double? GetScore()
+        {
+
+            return Player.GetScore(Game);
+        }
     }
 }
