@@ -19,7 +19,6 @@ namespace Salvo.Models
 
         public double? GetScore()
         {
-
             return Player.GetScore(Game);
         }
     }

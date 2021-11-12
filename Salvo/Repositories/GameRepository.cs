@@ -25,8 +25,6 @@ namespace Salvo.Repositories
                 .Include(game => game.GamePlayers)
                     .ThenInclude(gameplayer => gameplayer.Player)
                     .ThenInclude(player => player.Scores))
-                .Include(game => game.Scores)
-                    .ThenInclude(sc => sc.Player)
                 .OrderBy(game => game.CreationDate).ToList();
         }
     }

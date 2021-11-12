@@ -589,7 +589,6 @@ namespace Salvo.Models
                 //Player references
                 Player player1 = context.Players.Find(1L);
                 Player player2 = context.Players.Find(2L);
-                Player player3 = context.Players.Find(3L);
                 Player player4 = context.Players.Find(4L);
 
                 var scores = new Score[]

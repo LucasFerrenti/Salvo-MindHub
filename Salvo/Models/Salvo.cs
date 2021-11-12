@@ -13,7 +13,5 @@ namespace Salvo.Models
 
         public GamePlayer GamePlayer { get; set; }
         public ICollection<SalvoLocation> Locations { get; set; }
-
-
     }
 }

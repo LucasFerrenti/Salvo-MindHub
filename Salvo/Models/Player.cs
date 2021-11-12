@@ -17,7 +17,7 @@ namespace Salvo.Models
 
         public double? GetScore(Game game)
         {
-            var score = Scores.Where(sc => sc.GameId == game.Id).FirstOrDefault();
+            var score = Scores.FirstOrDefault(sc => sc.GameId == game.Id);
             return score != null ? score.Point : null;
         }
     }
