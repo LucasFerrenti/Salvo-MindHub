@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Salvo.Models;
 using Salvo.Repositories;
 using System;
@@ -12,6 +13,7 @@ namespace Salvo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class GamesController : ControllerBase
     {
         private IGameRepository _repository;
@@ -22,12 +24,13 @@ namespace Salvo.Controllers
 
         // GET: api/<GamesController>
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get()
         {
             try
             {
-                var games = _repository.GetAllGamesWithPlayers()
-                    .Select(g => new GameDTO
+                //get games
+                var games = _repository.GetAllGamesWithPlayers().Select(g => new GameDTO
                     {
                         Id = g.Id,
                         CreationDate = g.CreationDate,
@@ -43,7 +46,16 @@ namespace Salvo.Controllers
                             Point = gp.GetScore()
                         }).ToList()
                     }).ToList();
-                return Ok(games);
+                //get email
+                var email = User.FindFirst("Player");
+                //create game list
+                var gameList = new GameListDTO
+                {
+                    Email = email == null ? "Guest" : email.Value,
+                    Games = games
+                };
+
+                return Ok(gameList);
             }
             catch (Exception e)
             {

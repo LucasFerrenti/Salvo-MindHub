@@ -21,6 +21,19 @@ var app = new Vue({
             .catch(error => {
                 alert("erro al obtener los datos");
             })
+    },
+    methods: {
+        logout: function () {
+            axios.post('/api/auth/logout')
+                .then(result => {
+                    if (result.status == 200) {
+                        window.location.replace('/index.html');
+                    }
+                })
+                .catch(error => {
+                    alert("Ocurrió un error al cerrar sesión");
+                });
+        }
     }
 })
 

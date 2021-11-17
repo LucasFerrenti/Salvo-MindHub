@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Salvo.Repositories;
 using Salvo.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,6 +13,7 @@ namespace Salvo.Controllers
 {
     [Route("api/gamePlayers")]
     [ApiController]
+    [Authorize("PlayerOnly")]
     public class GamePlayersController : ControllerBase
     {
         private IGamePlayerRepository _repository;
@@ -28,6 +30,7 @@ namespace Salvo.Controllers
             try
             {
                 var gp = _repository.GetGamePlayerView(id);
+
                 var gameView = new GameViewDTO
                 {
                     Id = gp.Id,
@@ -71,6 +74,7 @@ namespace Salvo.Controllers
                         }).ToList()
                     })).ToList()
                 };
+                
                 return Ok(gameView);
             }
             catch (Exception e)

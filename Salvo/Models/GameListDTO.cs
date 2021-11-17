@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 
 namespace Salvo.Models
 {
-    public class PlayerDTO
+    public class GameListDTO
     {
-        public long Id { get; set; }
         public string Email { get; set; }
-        public string User { get; set; }
-        public string Password { get; set; }
-
+        public ICollection<GameDTO> Games { get; set; }
     }
 }

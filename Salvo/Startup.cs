@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Salvo.Models;
 using Salvo.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace Salvo
 {
@@ -33,6 +35,20 @@ namespace Salvo
             services.AddScoped<IGameRepository, GameRepository>();
             //injeccion réposotorio gameplayer
             services.AddScoped<IGamePlayerRepository, GamePlayerRepository>();
+            //injeccion réposotorio player
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
+            //Authentication
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                    options.LoginPath = new PathString("/index.html");
+                });
+            //Authorization
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("PlayerOnly", policy => policy.RequireClaim("Player"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,9 +66,12 @@ namespace Salvo
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
