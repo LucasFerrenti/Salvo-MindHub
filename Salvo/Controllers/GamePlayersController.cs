@@ -23,13 +23,17 @@ namespace Salvo.Controllers
             _repository = repository;
         }
 
-        // GET api/<GamePlayersController>/5
         [HttpGet("{id}", Name ="GetGameView")]
         public IActionResult GetGameView(int id)
         {
             try
             {
+                var userEmail = User.FindFirst("Player").Value;
+
                 var gp = _repository.GetGamePlayerView(id);
+
+                if (gp.Player.Email != userEmail)
+                    return Forbid();
 
                 var gameView = new GameViewDTO
                 {
@@ -74,7 +78,7 @@ namespace Salvo.Controllers
                         }).ToList()
                     })).ToList()
                 };
-                
+
                 return Ok(gameView);
             }
             catch (Exception e)

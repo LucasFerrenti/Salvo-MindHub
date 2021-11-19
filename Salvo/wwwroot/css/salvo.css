@@ -10,4 +10,9 @@
 
 #user-name{
     color: red;
+    vertical-align: middle;
+}
+
+#games-list{
+    display: inline-block;
 }

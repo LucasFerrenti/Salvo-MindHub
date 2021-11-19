@@ -16,13 +16,16 @@ namespace Salvo.Controllers
     [Authorize]
     public class GamesController : ControllerBase
     {
-        private IGameRepository _repository;
-        public GamesController(IGameRepository repository)
+        private IGameRepository _gameRepository;
+        private IGamePlayerRepository _gpRepository;
+        private IPlayerRepository _playerRepository;
+        public GamesController(IGameRepository gameRepository, IPlayerRepository playerRepository, IGamePlayerRepository gamePlayerRepository)
         {
-            _repository = repository;
+            _gameRepository = gameRepository;
+            _gpRepository = gamePlayerRepository;
+            _playerRepository = playerRepository;
         }
 
-        // GET: api/<GamesController>
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Get()
@@ -30,7 +33,7 @@ namespace Salvo.Controllers
             try
             {
                 //get games
-                var games = _repository.GetAllGamesWithPlayers().Select(g => new GameDTO
+                var games = _gameRepository.GetAllGamesWithPlayers().Select(g => new GameDTO
                     {
                         Id = g.Id,
                         CreationDate = g.CreationDate,
@@ -56,6 +59,36 @@ namespace Salvo.Controllers
                 };
 
                 return Ok(gameList);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Post()
+        {
+            try
+            {
+                var user = User.FindFirst("Player");
+                var email = user == null ? "Guest" : user.Value;
+
+                var player = _playerRepository.FindByEmail(email);
+                var timeNow = DateTime.Now;
+
+                GamePlayer gp = new GamePlayer
+                {
+                    Game = new Game
+                    {
+                        CreationDate = timeNow
+                    },
+                    PlayerID = player.Id,
+                    JoinDate = timeNow,
+                };
+
+                _gpRepository.Save(gp);
+                return Created("Game Creado", gp.Id);
             }
             catch (Exception e)
             {

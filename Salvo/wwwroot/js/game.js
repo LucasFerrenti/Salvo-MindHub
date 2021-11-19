@@ -5,7 +5,6 @@
         scores: [],
         email: "",
         password: "",
-        user: "",
         modal: {
             tittle: "",
             message: ""
@@ -16,6 +15,20 @@
         this.getGames();
     },
     methods: {
+        createGame() {
+            var gpId = null;
+            axios.post('/api/games')
+                .then(response => {
+                    gpId = response.data;
+                    window.location.href = '/game.html?gp=' + gpId;
+                })
+                .catch(error => {
+                    alert("erro al obtener los datos");
+                });
+        },
+        returnGame(gpId) {
+            window.location.href = '/game.html?gp=' + gpId;
+        },
         getGames: function (){
             this.showLogin(false);
             axios.get('/api/games')
@@ -23,12 +36,8 @@
                     this.player = response.data.email;
                     this.games = response.data.games;
                     this.getScores(this.games)
-                    if (this.player == "Guest"){
+                    if (this.player == "Guest")
                         this.showLogin(true);
-                    }
-                    else{
-                        $("#logout-btn").show();
-                    }
                 })
                 .catch(error => {
                     alert("erro al obtener los datos");
@@ -46,8 +55,6 @@
                 $("#login-form").trigger("reset");
                 this.email = "";
                 this.password = "";
-                this.user = "";
-                $("#logout-btn").hide();
             }
             else
                 $("#login-form").hide();
@@ -66,7 +73,7 @@
         },
         login: function(event){
             axios.post('/api/auth/login', {
-                email: this.email, password: this.password, Name: this.user
+                email: this.email, password: this.password
             })
                 .then(result => {
                     if (result.status == 200) {
@@ -90,7 +97,7 @@
         },
         signin: function (event) {
             axios.post('/api/players', {
-                email: this.email, password: this.password, user: this.user
+                email: this.email, password: this.password
             })
                 .then(result => {
                     if (result.status == 201) {

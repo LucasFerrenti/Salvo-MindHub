@@ -29,7 +29,6 @@
                 <form id="login-form" class="form-inline my-2 my-lg-0">
                     <input v-model:value="email" class="form-control mr-sm-2" type="email" placeholder="Email" aria-label="Email">
                     <input v-model:value="password" class="form-control mr-sm-2" type="password" placeholder="Contrase&ntilde;a" aria-label="Contraseña">
-                    <input v-model:value="user" class="form-control mr-sm-2" type="email" placeholder="Usuario" aria-label="User">
                     <button v-on:click="login" id="login-btn" class="btn btn-outline-success my-2 my-sm-0" type="button">Login</button>
                     <button v-on:click="signin" id="signin-btn" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Registro</button>
                 </form>
@@ -44,12 +43,16 @@
             </div>
             <div class="row mt-5">
                 <div class="col">
-                    <h2>Juegos</h2>
+                    <h2 id="games-list">Juegos</h2>
+                    <button v-if="player != 'Guest'" v-on:click="createGame()" id="create-btn" class="btn btn-success btn-sm ml-1 my-2 my-sm-0" type="button">Crear juego!</button>
                     <ul class="">
                         <li v-for="game in games">
                             <span>{{game.creationDate | dateFormat}}</span>
                             <ul>
-                                <li v-for="gamePlayer in game.gamePlayers">{{gamePlayer.player.email}}</li>
+                                <li v-for="gamePlayer in game.gamePlayers">
+                                    {{gamePlayer.player.email}}
+                                    <button v-if="gamePlayer.player.email == player" class="btn btn-primary btn-sm" v-on:click="returnGame(gamePlayer.id)">Ir al juego</button>
+                                </li>
                             </ul>
                         </li>
                     </ul>
