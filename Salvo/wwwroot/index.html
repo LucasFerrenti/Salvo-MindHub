@@ -50,8 +50,9 @@
                             <span>{{game.creationDate | dateFormat}}</span>
                             <ul>
                                 <li v-for="gamePlayer in game.gamePlayers">
-                                    {{gamePlayer.player.email}}
+                                    {{gamePlayer.player.email}} 
                                     <button v-if="gamePlayer.player.email == player" class="btn btn-primary btn-sm" v-on:click="returnGame(gamePlayer.id)">Ir al juego</button>
+                                    <button v-else-if="player != 'Guest' && gamePlayer.player.email != player && game.gamePlayers.length < 2" class="btn btn-success btn-sm" v-on:click="joinGame(game.id)">Unirse al juego</button>
                                 </li>
                             </ul>
                         </li>

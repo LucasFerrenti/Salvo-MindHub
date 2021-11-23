@@ -31,9 +31,10 @@
                     <span v-else>{{ player.email }}</span>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col">
                     <h2>Barcos</h2>
+                    <button v-if="gameView.ships && gameView.ships.length < 5" class="btn btn-success btn-sm mb-3" v-on:click="placeShips()">Posicionar barcos!!</button>
                     <div class="grid-ships">
                         <!-- div que usa la librería gridstack grid-stack-10 se indica que son 10 columnas-->
                         <div id="grid" class="grid-stack grid-stack-10">

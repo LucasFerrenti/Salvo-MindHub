@@ -86,5 +86,39 @@ namespace Salvo.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+        [HttpPost("{id}/ships")]
+        public IActionResult Post(long id, [FromBody]List<ShipDTO> ships)
+        {
+            try
+            {
+                //check gp exist
+                GamePlayer gp = _repository.FindById(id);
+                if (gp == null)
+                    return StatusCode(403, "No existe el juego");
+                //check player
+                var userClaim = User.FindFirst("Player");
+                var userEmail = userClaim == null ? "Guest" : userClaim.Value;
+                if (gp.Player.Email != userEmail)
+                    return StatusCode(403, "El usuario no se encuentra en el juego");
+                //check ships
+                if (gp.Ships.Count >= 5)
+                    return StatusCode(403, "Ya se han posicionado los barcos");
+                //save ships
+                gp.Ships = ships.Select(ships => new Ship
+                {
+                    Type = ships.Type,
+                    Locations = ships.Locations.Select(loc => new ShipLocation
+                    {
+                        Location = loc.Location
+                    }).ToList(),
+                }).ToList();
+                _repository.Save(gp);
+                return StatusCode(201, "barcos posicionados!!");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
     }
 }

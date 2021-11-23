@@ -12,11 +12,13 @@ var app = new Vue({
         axios.get('/api/gamePlayers/'+gpId)
             .then(response => {
                 this.gameView = response.data;
+                var static = this.gameView.ships && this.gameView.ships.length > 0;
                 getPlayers(this.gameView, gpId);
-                initializeGrid(this.gameView);
+                initializeGrid(this.gameView,static);
                 placeShips(this.gameView.ships);
-                placeSalvos(this.gameView.salvos, this.player.id, this.gameView.ships)
-                addEvents();
+                placeSalvos(this.gameView.salvos, this.player.id, this.gameView.ships);
+                if (!static)
+                    addEvents();
             })
             .catch(error => {
                 alert("erro al obtener los datos");
@@ -33,6 +35,48 @@ var app = new Vue({
                 .catch(error => {
                     alert("Ocurrió un error al cerrar sesión");
                 });
+        },
+        placeShips: function () {
+            var shipTypeAndCells = [];
+
+            for (var i = 1; i <= 5; i++) {
+                var shipLoc = new Object();
+                var cellsArray = [];
+
+                var h = parseInt($("#grid .grid-stack-item:nth-child(" + i + ")").attr("data-gs-height"));
+                var w = parseInt($("#grid .grid-stack-item:nth-child(" + i + ")").attr("data-gs-width"));
+                var posX = parseInt($("#grid .grid-stack-item:nth-child(" + i + ")").attr("data-gs-x"));
+                var posY = parseInt($("#grid .grid-stack-item:nth-child(" + i + ")").attr("data-gs-y")) + 64;
+
+                if (w > h) {
+                    for (var e = 1; e <= w; e++) {
+                        var HHH = String.fromCharCode(posY + 1) + (posX + e);
+                        cellsArray.push({ id: 0, location: HHH });
+                        shipLoc.id = 0;
+                        shipLoc.type = $("#grid .grid-stack-item:nth-child(" + i + ")").attr("id");
+                        shipLoc.locations = cellsArray;
+                    }
+                } else if (h > w) {
+                    for (var d = 1; d <= h; d++) {
+                        var VVV = String.fromCharCode(posY + d) + (posX + 1);
+                        cellsArray.push({ id: 0, location: VVV });
+                        shipLoc.id = 0;
+                        shipLoc.type = $("#grid .grid-stack-item:nth-child(" + i + ")").attr("id");
+                        shipLoc.locations = cellsArray;
+                    }
+                }
+                shipTypeAndCells.push(shipLoc);
+            }
+            this.postShips(shipTypeAndCells);
+        },
+        postShips: function (shipTypeAndCells) {
+            axios.post('/api/gamePlayers/' + this.gameView.id + '/ships', shipTypeAndCells)
+                .then(response => {
+                    window.location.reload();
+                })
+                .catch(error => {
+                    alert("error: " + error.response.data);
+                });
         }
     }
 })
@@ -46,7 +90,7 @@ function getPlayers(gameView,gpId) {
     });
 }
 
-function initializeGrid(gameview) {
+function initializeGrid(gameview, static) {
     var options = {
         //grilla de 10 x 10
         width: 10,
@@ -63,7 +107,7 @@ function initializeGrid(gameview) {
         //permite que el widget ocupe mas de una columna
         disableOneColumnMode: true,
         //false permite mover, true impide
-        staticGrid: false,
+        staticGrid: static,
         //activa animaciones (cuando se suelta el elemento se ve más suave la caida)
         animate: true
     }
@@ -74,47 +118,56 @@ function initializeGrid(gameview) {
 function placeShips(ships) {
     grid = $('#grid').data('gridstack');
     ships = JSON.parse(JSON.stringify(ships));
-    ships.forEach(ship => {
-        ship.locations.sort((a, b) => {
-            if (a.location > b.location)
-                return 1;
-            else if (a.location < b.location)
-                return -1;
-            else
-                return 0;
-        });
+    if (ships.length > 0) {
+        ships.forEach(ship => {
+            ship.locations.sort((a, b) => {
+                if (a.location > b.location)
+                    return 1;
+                else if (a.location < b.location)
+                    return -1;
+                else
+                    return 0;
+            });
 
-        var searchChar = ship.locations[0].location.slice(0, 1);
-        var secondChar = ship.locations[1].location.slice(0, 1);
-        if (searchChar === secondChar) {
-            ship.position = "Horizontal";
-        } else {
-            ship.position = "Vertical";
-        }
-        for (var i = 0; i < ship.locations.length; i++) {
-            ship.locations[i].location = ship.locations[i].location.replace(/A/g, '0');
-            ship.locations[i].location = ship.locations[i].location.replace(/B/g, '1');
-            ship.locations[i].location = ship.locations[i].location.replace(/C/g, '2');
-            ship.locations[i].location = ship.locations[i].location.replace(/D/g, '3');
-            ship.locations[i].location = ship.locations[i].location.replace(/E/g, '4');
-            ship.locations[i].location = ship.locations[i].location.replace(/F/g, '5');
-            ship.locations[i].location = ship.locations[i].location.replace(/G/g, '6');
-            ship.locations[i].location = ship.locations[i].location.replace(/H/g, '7');
-            ship.locations[i].location = ship.locations[i].location.replace(/I/g, '8');
-            ship.locations[i].location = ship.locations[i].location.replace(/J/g, '9');
-        }
-        
-        var yInGrid = parseInt(ship.locations[0].location.slice(0, 1));
-        var xInGrid = parseInt(ship.locations[0].location.slice(1, 3)) - 1;
+            var searchChar = ship.locations[0].location.slice(0, 1);
+            var secondChar = ship.locations[1].location.slice(0, 1);
+            if (searchChar === secondChar) {
+                ship.position = "Horizontal";
+            } else {
+                ship.position = "Vertical";
+            }
+            for (var i = 0; i < ship.locations.length; i++) {
+                ship.locations[i].location = ship.locations[i].location.replace(/A/g, '0');
+                ship.locations[i].location = ship.locations[i].location.replace(/B/g, '1');
+                ship.locations[i].location = ship.locations[i].location.replace(/C/g, '2');
+                ship.locations[i].location = ship.locations[i].location.replace(/D/g, '3');
+                ship.locations[i].location = ship.locations[i].location.replace(/E/g, '4');
+                ship.locations[i].location = ship.locations[i].location.replace(/F/g, '5');
+                ship.locations[i].location = ship.locations[i].location.replace(/G/g, '6');
+                ship.locations[i].location = ship.locations[i].location.replace(/H/g, '7');
+                ship.locations[i].location = ship.locations[i].location.replace(/I/g, '8');
+                ship.locations[i].location = ship.locations[i].location.replace(/J/g, '9');
+            }
 
-        if (ship.position === "Horizontal") {
-            grid.addWidget($('<div id="' + ship.type + '"><div class="grid-stack-item-content ' + ship.type + 'Horizontal"></div><div/>'),
-                xInGrid, yInGrid, ship.locations.length, 1, false);
-        } else if (ship.position === "Vertical") {
-            grid.addWidget($('<div id="' + ship.type + '"><div class="grid-stack-item-content ' + ship.type + 'Vertical"></div><div/>'),
-                xInGrid, yInGrid, 1, ship.locations.length, false);
-        }
-    })
+            var yInGrid = parseInt(ship.locations[0].location.slice(0, 1));
+            var xInGrid = parseInt(ship.locations[0].location.slice(1, 3)) - 1;
+
+            if (ship.position === "Horizontal") {
+                grid.addWidget($('<div id="' + ship.type + '"><div class="grid-stack-item-content ' + ship.type + 'Horizontal"></div><div/>'),
+                    xInGrid, yInGrid, ship.locations.length, 1, false);
+            } else if (ship.position === "Vertical") {
+                grid.addWidget($('<div id="' + ship.type + '"><div class="grid-stack-item-content ' + ship.type + 'Vertical"></div><div/>'),
+                    xInGrid, yInGrid, 1, ship.locations.length, false);
+            }
+        })
+    }
+    else {
+        grid.addWidget($('<div id="PatroalBoat"><div class="grid-stack-item-content PatroalBoatHorizontal"></div><div/>'), 0, 0, 2, 1, false);
+        grid.addWidget($('<div id="Destroyer"><div class="grid-stack-item-content DestroyerHorizontal"></div><div/>'), 0, 1, 3, 1, false);
+        grid.addWidget($('<div id="Submarine"><div class="grid-stack-item-content SubmarineHorizontal"></div><div/>'), 0, 2, 3, 1, false);
+        grid.addWidget($('<div id="BattleShip"><div class="grid-stack-item-content BattleShipHorizontal"></div><div/>'), 0, 3, 4, 1, false);
+        grid.addWidget($('<div id="Carrier"><div class="grid-stack-item-content CarrierHorizontal"></div><div/>'), 0, 4, 5, 1, false);
+    }
 }
 
 function placeSalvos(salvos, playerId, ships) {

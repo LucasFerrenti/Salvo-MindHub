@@ -15,6 +15,17 @@
         this.getGames();
     },
     methods: {
+        joinGame(gId) {
+            var gpId = null;
+            axios.post('/api/games/' + gId + '/players')
+                .then(response => {
+                    gpId = response.data;
+                    window.location.href = '/game.html?gp=' + gpId;
+                })
+                .catch(error => {
+                    alert("erro al unirse al juego");
+                });
+        },
         createGame() {
             var gpId = null;
             axios.post('/api/games')
