@@ -106,9 +106,11 @@ namespace Salvo.Controllers
                 //save ships
                 gp.Ships = ships.Select(ships => new Ship
                 {
+                    GamePlayerId = gp.Id,
                     Type = ships.Type,
                     Locations = ships.Locations.Select(loc => new ShipLocation
                     {
+                        shipId = ships.Id,
                         Location = loc.Location
                     }).ToList(),
                 }).ToList();
