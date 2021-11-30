@@ -6,7 +6,8 @@ var app = new Vue({
     data: {
         gameView: {},
         player: { email: null },
-        opponent: { email: null }
+        opponent: { email: null },
+        salvoCount: 0
     },
     mounted() {
         axios.get('/api/gamePlayers/'+gpId)
@@ -17,11 +18,13 @@ var app = new Vue({
                 initializeGrid(this.gameView,static);
                 placeShips(this.gameView.ships);
                 placeSalvos(this.gameView.salvos, this.player.id, this.gameView.ships);
-                if (!static)
-                    addEvents();
+                if (!static)    
+                    addEventsShips();
+                else
+                    addEventsSalvo();
             })
             .catch(error => {
-                alert("erro al obtener los datos");
+                alert("error al obtener los datos");
             })
     },
     methods: {
@@ -71,6 +74,31 @@ var app = new Vue({
         },
         postShips: function (shipTypeAndCells) {
             axios.post('/api/gamePlayers/' + this.gameView.id + '/ships', shipTypeAndCells)
+                .then(response => {
+                    window.location.reload();
+                })
+                .catch(error => {
+                    alert("error: " + error.response.data);
+                });
+        },
+        placeSalvos: function () {
+            if (this.salvoCount == 5) {
+                var cellsArray = [];
+                $(".salvo.shoot").each(function () {
+                    cellsArray.push({ id: 0, location: $(this).attr("id") });
+                })
+                var salvo = new Object();
+                salvo.id = 0;
+                salvo.turn = 0;
+                salvo.locations = cellsArray;
+                this.postSalvos(salvo);
+            }
+            else {
+                alert("error: debe indicar todas las posiciones de los salvos");
+            }
+        },
+        postSalvos: function (salvos) {
+            axios.post('/api/gamePlayers/' + this.gameView.id + '/salvos', salvos)
                 .then(response => {
                     window.location.reload();
                 })
@@ -178,7 +206,7 @@ function placeSalvos(salvos, playerId, ships) {
     salvos.forEach(salvo => {
         if (salvo.player.id == playerId) {
             salvo.locations.forEach(location => {
-                $('#' + location.location).addClass("shot");
+                $('#' + location.location).addClass("shooted");
                 $('#' + location.location).text(salvo.turn);
             })
         }
@@ -196,7 +224,6 @@ function placeSalvos(salvos, playerId, ships) {
                     location.location = location.location.replace(/I/g, '8');
                     location.location = location.location.replace(/J/g, '9');
 
-                    console.log(parseInt(location.location.slice(0, 1)))
                     var yInGrid = (parseInt(location.location.slice(0, 1)) * 40) + 42;
                     var xInGrid = ((parseInt(location.location.slice(1, 3)) - 1) * 40) + 42;
                     $('.grid-ships').append('<div class="hitSelf" style="top:' + yInGrid + 'px; left:' + xInGrid + 'px;" ></div>');
@@ -206,7 +233,7 @@ function placeSalvos(salvos, playerId, ships) {
     })
 }
 
-function addEvents() {
+function addEventsShips() {
     $("#Carrier, #PatroalBoat, #Submarine, #Destroyer, #BattleShip").click(function () {
         var h = parseInt($(this).attr("data-gs-height"));
         var w = parseInt($(this).attr("data-gs-width"));
@@ -224,6 +251,26 @@ function addEvents() {
                 grid.update($(this), posX, posY, h, w);
                 $(this).children('.grid-stack-item-content').addClass($(this).attr('id') + "Horizontal");
                 $(this).children('.grid-stack-item-content').removeClass($(this).attr('id') + "Vertical");
+            }
+        }
+    });
+}
+
+function addEventsSalvo() {
+    $(".salvo").click(function () {
+        if (app.salvoCount < 5 && !$(this).hasClass('shooted')) {
+            if ($(this).hasClass('shoot')) {
+                $(this).removeClass('shoot');
+                app.salvoCount--;
+            }
+            else {
+                $(this).addClass('shoot');
+                app.salvoCount++;
+            }
+        } else {
+            if ($(this).hasClass('shoot')) {
+                $(this).removeClass('shoot');
+                app.salvoCount--;
             }
         }
     });

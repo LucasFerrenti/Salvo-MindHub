@@ -122,5 +122,63 @@ namespace Salvo.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        [HttpPost("{id}/salvos")]
+        public IActionResult Post(long id, [FromBody]SalvoDTO salvo)
+        {
+            try
+            {
+                //check gp exist
+                GamePlayer gamePlayer = _repository.FindById(id);
+                if (gamePlayer == null)
+                    return StatusCode(403, "No existe el juego");
+
+                //check player
+                var userClaim = User.FindFirst("Player");
+                var userEmail = userClaim == null ? "Guest" : userClaim.Value;
+                if (gamePlayer.Player.Email != userEmail)
+                    return StatusCode(403, "El usuario no se encuentra en el juego");
+
+                //check oponent
+                GamePlayer oponent = gamePlayer.GetOponent();
+                if (oponent == null)
+                    return StatusCode(403, "No hay oponente");
+
+                //check ships
+                if (gamePlayer.Ships.Count == 0)
+                    return StatusCode(403, "Falta posicionar tus barcos");
+                if (oponent.Ships.Count == 0)
+                    return StatusCode(403, "Falta posicionar los barcos del oponente");
+
+                //check turns
+                GamePlayer creator = gamePlayer.Game.CreationDate == gamePlayer.JoinDate ? gamePlayer : oponent;
+                int gpTurn = gamePlayer.Salvos.Count;
+                int opTurn = oponent.Salvos.Count;
+                int diffTurn = gpTurn - opTurn;
+                
+                //save
+                if (creator == gamePlayer && diffTurn >= 1 || creator == oponent && diffTurn >= 0)
+                {
+                    return StatusCode(403, "no se puede adelantar");
+                }
+
+                gamePlayer.Salvos.Add(new Models.Salvo
+                {
+                    GamePlayerId = gamePlayer.Id,
+                    Locations = salvo.Locations.Select(loc => new SalvoLocation
+                    {
+                        Location = loc.Location,
+                    }).ToList(),
+                    turn = gpTurn + 1
+                });
+                
+                _repository.Save(gamePlayer);
+                return StatusCode(201, "salvos disparados!!");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
     }
 }

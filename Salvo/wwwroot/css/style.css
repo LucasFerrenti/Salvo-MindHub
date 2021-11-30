@@ -96,7 +96,7 @@
     text-align: center;
 }
 
-.shot{
+.shoot{
     background-image: url('../img/targetself.png');
     background-size: contain;
 }
@@ -107,4 +107,10 @@
     height: 40px;
     background-image: url('../img/hit3.gif');
     background-size: contain;
+}
+
+.shooted {
+    background-image: url('../img/targetself.png');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
