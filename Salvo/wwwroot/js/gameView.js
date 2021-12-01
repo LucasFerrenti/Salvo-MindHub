@@ -22,6 +22,8 @@ var app = new Vue({
                     addEventsShips();
                 else
                     addEventsSalvo();
+                placeSinksShips(this.gameView.sunks, this.gameView.sunksOpponent);
+                placeHits(this.gameView.hits);
             })
             .catch(error => {
                 alert("error al obtener los datos");
@@ -274,4 +276,26 @@ function addEventsSalvo() {
             }
         }
     });
+}
+
+function placeHits(playerHits) {
+    playerHits.forEach(function (playerHit) {
+        if (playerHit.hits != null)
+            playerHit.hits.forEach(function (hit) {
+                hit.hits.forEach(function (hitCell) {
+                    $("#" + hitCell).addClass("hitOpponent");
+                })
+            })
+    })
+}
+
+function placeSinksShips(playerSunks, opponentSunks) {
+    if (playerSunks != null)
+        playerSunks.forEach(function (sunk) {
+            $("#" + sunk + "Icon").attr("src", "img/" + sunk.toLowerCase() +"sunk.png");
+        })
+    if (opponentSunks != null)
+        opponentSunks.forEach(function (sunk) {
+            $("#Opponent" + sunk + "Icon").attr("src", "img/" + sunk.toLowerCase() + "sunk.png");
+        })
 }

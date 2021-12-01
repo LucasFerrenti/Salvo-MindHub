@@ -51,7 +51,7 @@ namespace Salvo.Controllers
                         }
                     }).ToList(),
 
-                    Ships = gp.Ships.Select(ship => new ShipDTO 
+                    Ships = gp.Ships.Select(ship => new ShipDTO
                     {
                         Id = ship.Id,
                         Type = ship.Type,
@@ -76,7 +76,12 @@ namespace Salvo.Controllers
                             Id = location.Id,
                             Location = location.Location
                         }).ToList()
-                    })).ToList()
+                    })).ToList(),
+
+                    Hits = gp.GetHits(),
+                    HitsOpponent = gp.GetOponent()?.GetHits(),
+                    Sunks = gp.GetSunks(),
+                    SunksOpponent = gp.GetOponent()?.GetSunks()
                 };
 
                 return Ok(gameView);

@@ -114,3 +114,24 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.hitOpponent {
+    background-image: url('../img/hit3.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#playersList{
+    display: inline;
+    margin-left: 20px;
+    color: black;
+}
+
+#playersList #playerOne {
+    color: red;
+}
+
+.shipsStatus{
+    background-color: #3b7ad3;
+    max-width: 450px;
+}
