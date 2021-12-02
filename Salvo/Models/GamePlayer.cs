@@ -51,14 +51,8 @@ namespace Salvo.Models
                     .Select(salvoLoc => salvoLoc.Location).ToList();
             return
                 Ships?.Where(ship => ship.Locations.Select(shipLoc => shipLoc.Location)
-                    .All(shipLoc => salvoLocations.Contains(shipLoc)))
+                    .All(shipLoc => salvoLocations == null ? false : salvoLocations.Contains(shipLoc)))
                     .Select(ship => ship.Type).ToList();
-            //var yop = Ships?.Where(ship => ship.Locations.Select(shipLoc => shipLoc.Location)
-            //            .All(shipLoc => salvoLocations.Contains(shipLoc)))
-            //            .Select(ship => ship.Type).ToList();
-            //var prof = Ships?.Where(ship => ship.Locations.Select(shipLoc => shipLoc.Location)
-            //        .All(shipLoc => salvoLocations != null ? salvoLocations.Any(salvoLoc => salvoLoc == shipLoc) : false))
-            //        .Select(ship => ship.Type).ToList();
         }
     }
 }
