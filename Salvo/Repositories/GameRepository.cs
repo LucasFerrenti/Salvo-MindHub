@@ -9,7 +9,7 @@ namespace Salvo.Repositories
 {
     public class GameRepository : RepositoryBase<Game>, IGameRepository
     {
-        public GameRepository(SalvoContex repositoryContext) : base(repositoryContext)
+        public GameRepository(SalvoContext repositoryContext) : base(repositoryContext)
         {
 
         }
@@ -30,10 +30,10 @@ namespace Salvo.Repositories
         public IEnumerable<Game> GetAllGamesWithPlayers()
         {
             return FindAll(source => source
-                .Include(game => game.GamePlayers)
-                    .ThenInclude(gameplayer => gameplayer.Player)
-                    .ThenInclude(player => player.Scores))
-                .OrderBy(game => game.CreationDate).ToList();
+                    .Include(game => game.GamePlayers)
+                        .ThenInclude(gameplayer => gameplayer.Player)
+                        .ThenInclude(player => player.Scores))
+                    .OrderBy(game => game.CreationDate).ToList();
         }
     }
 }

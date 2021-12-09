@@ -8,7 +8,7 @@ using Salvo.Models;
 
 namespace Salvo.Migrations
 {
-    [DbContext(typeof(SalvoContex))]
+    [DbContext(typeof(SalvoContext))]
     partial class SalvoContexModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

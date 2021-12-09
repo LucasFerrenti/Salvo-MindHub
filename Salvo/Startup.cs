@@ -30,13 +30,16 @@ namespace Salvo
         {
             services.AddRazorPages();
             //injeccion de dependencia salvocontext
-            services.AddDbContext<SalvoContex>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SalvoDB")));
+            services.AddDbContext<SalvoContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("SalvoDB"),
+                                                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
             //injeccion réposotorio game
             services.AddScoped<IGameRepository, GameRepository>();
             //injeccion réposotorio gameplayer
             services.AddScoped<IGamePlayerRepository, GamePlayerRepository>();
             //injeccion réposotorio player
             services.AddScoped<IPlayerRepository, PlayerRepository>();
+            //injeccion repositorio score
+            services.AddScoped<IScoreRepository, ScoreRepository>();
             //Authentication
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

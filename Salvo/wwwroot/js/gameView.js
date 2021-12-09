@@ -7,29 +7,57 @@ var app = new Vue({
         gameView: {},
         player: { email: null },
         opponent: { email: null },
-        salvoCount: 0
+        salvoCount: 0,
+        gameState: "",
+        interval: null
     },
     mounted() {
-        axios.get('/api/gamePlayers/'+gpId)
+        axios.get('/api/gamePlayers/' + gpId)
             .then(response => {
                 this.gameView = response.data;
                 var static = this.gameView.ships && this.gameView.ships.length > 0;
                 getPlayers(this.gameView, gpId);
-                initializeGrid(this.gameView,static);
+                initializeGrid(this.gameView, static);
                 placeShips(this.gameView.ships);
-                placeSalvos(this.gameView.salvos, this.player.id, this.gameView.ships);
-                if (!static)    
+                if (!static)
                     addEventsShips();
                 else
                     addEventsSalvo();
-                placeSinksShips(this.gameView.sunks, this.gameView.sunksOpponent);
-                placeHits(this.gameView.hits);
+                this.getGameData();
             })
             .catch(error => {
                 alert("error al obtener los datos");
             })
     },
     methods: {
+        getGameData: function () {
+            if(this.gameView.gameState == 'ENTER_SALVO'){
+                app.salvoCount = 0;
+            }
+            else{
+                app.salvoCount = 5;
+            }
+            placeSalvos(this.gameView.salvos, this.player.id, this.gameView.ships);
+            placeSinksShips(this.gameView.sunks, this.gameView.sunksOpponent);
+            placeHits(this.gameView.hits);
+            this.gameState = getGameState(this.gameView.gameState);
+            if (this.gameView.gameState == 'WAIT') {
+                if (this.interval == null){
+                    this.interval = setInterval(this.refresh, 10000);
+                }
+            }
+            else {
+                clearInterval(this.interval);
+                this.interval = null;
+            }
+        },
+        refresh: function () {
+            axios.get('/api/gamePlayers/' + gpId)
+                .then(response => {
+                    this.gameView = response.data;
+                    this.getGameData();
+                });
+        },
         logout: function () {
             axios.post('/api/auth/logout')
                 .then(result => {
@@ -84,10 +112,19 @@ var app = new Vue({
                 });
         },
         placeSalvos: function () {
+
             if (this.salvoCount == 5) {
                 var cellsArray = [];
+
+                //$(".salvo.shoot").each(function () {
+                //    if (!$(this).hasClass("shooted")) {
+                //        cellsArray.push({ id: 0, location: $(this).attr("id") });
+                //        $(this).removeClass('shoot');
+                //    }
+                //})
                 $(".salvo.shoot").each(function () {
                     cellsArray.push({ id: 0, location: $(this).attr("id") });
+                    $(this).removeClass('shoot');
                 })
                 var salvo = new Object();
                 salvo.id = 0;
@@ -102,16 +139,17 @@ var app = new Vue({
         postSalvos: function (salvos) {
             axios.post('/api/gamePlayers/' + this.gameView.id + '/salvos', salvos)
                 .then(response => {
-                    window.location.reload();
+                    app.refresh();
                 })
                 .catch(error => {
                     alert("error: " + error.response.data);
+                    app.salvoCount = 0
                 });
         }
     }
 })
 
-function getPlayers(gameView,gpId) {
+function getPlayers(gameView, gpId) {
     gameView.gamePlayers.forEach(gp => {
         if (gp.id == gpId)
             app.player = gp.player;
@@ -201,6 +239,7 @@ function placeShips(ships) {
 }
 
 function placeSalvos(salvos, playerId, ships) {
+    $('.hitSelf').remove();
     salvos = JSON.parse(JSON.stringify(salvos));
     const shitPositions = [];
     ships.forEach(ship => ship.locations.forEach(location => { shitPositions.push(location.location) }))
@@ -249,7 +288,7 @@ function addEventsShips() {
                 $(this).children('.grid-stack-item-content').addClass($(this).attr('id') + "Vertical");
             }
         } else {
-            if (grid.isAreaEmpty(posX + 1, posY, h - 1 , w) && posX + h <= 10) {
+            if (grid.isAreaEmpty(posX + 1, posY, h - 1, w) && posX + h <= 10) {
                 grid.update($(this), posX, posY, h, w);
                 $(this).children('.grid-stack-item-content').addClass($(this).attr('id') + "Horizontal");
                 $(this).children('.grid-stack-item-content').removeClass($(this).attr('id') + "Vertical");
@@ -292,10 +331,35 @@ function placeHits(playerHits) {
 function placeSinksShips(playerSunks, opponentSunks) {
     if (playerSunks != null)
         playerSunks.forEach(function (sunk) {
-            $("#" + sunk + "Icon").attr("src", "img/" + sunk.toLowerCase() +"sunk.png");
+            $("#" + sunk + "Icon").attr("src", "img/" + sunk.toLowerCase() + "sunk.png");
         })
     if (opponentSunks != null)
         opponentSunks.forEach(function (sunk) {
             $("#Opponent" + sunk + "Icon").attr("src", "img/" + sunk.toLowerCase() + "sunk.png");
         })
+}
+
+function getGameState(gameState) {
+    var state = "";
+    switch (gameState) {
+        case 'ENTER_SALVO':
+            state = 'Capitán, dispare las salvas'
+            break;
+        case 'PLACE_SHIPS':
+            state = 'Capitán, posicione los barcos'
+            break;
+        case 'WAIT':
+            state = 'Capitán, debe esperar la recarga de las armas'
+            break;
+        case 'WIN':
+            state = 'Capitán, ha ganado la batalla'
+            break;
+        case 'LOSS':
+            state = 'Capitán, ha perdido la batalla'
+            break;
+        case 'TIE':
+            state = 'Capitán, ha empatado'
+            break;
+    }
+    return state;
 }

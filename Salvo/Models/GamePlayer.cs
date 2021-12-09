@@ -44,15 +44,72 @@ namespace Salvo.Models
         public ICollection<string> GetSunks()
         {
             int lastTurn = Salvos.Count;
+            var t = GetOponent();
+
             List<string> salvoLocations = 
                 GetOponent()?.Salvos
                     .Where(salvo => salvo.turn <= lastTurn)
                     .SelectMany(salvo => salvo.Locations)
                     .Select(salvoLoc => salvoLoc.Location).ToList();
-            return
-                Ships?.Where(ship => ship.Locations.Select(shipLoc => shipLoc.Location)
+            return Ships?.Where(ship => ship.Locations.Select(shipLoc => shipLoc.Location)
                     .All(shipLoc => salvoLocations == null ? false : salvoLocations.Contains(shipLoc)))
                     .Select(ship => ship.Type).ToList();
+
+        }
+        public GameState GetGameState()
+        {
+            var opponent = GetOponent();
+            int myShips = Ships.Count;
+            int? opShips = opponent?.Ships.Count;
+
+            //place ships
+            if (myShips == 0 )
+                return GameState.PLACE_SHIPS;
+
+            //wait
+            if (opponent == null || opShips == null || opShips == 0)
+                return GameState.WAIT;
+
+            int myTurn = Salvos.Count;
+            int opTurn = opponent.Salvos.Count;
+            int mySunks = GetSunks().Count;
+            int opSunks = opponent.GetSunks().Count;
+
+            //game over?
+            if (myTurn == opTurn)
+            {
+                //tie
+                if (mySunks == 5 && opSunks == 5)
+                    return GameState.TIE;
+                //loss
+                if (mySunks == 5)
+                    return GameState.LOSS;
+                //win
+                if (opSunks == 5)
+                    return GameState.WIN;
+            }
+
+            var creator = JoinDate == Game.CreationDate;
+
+            //enter salvo and wait of creator
+            if (creator)
+            {
+                if (myTurn <= opTurn)
+                    return GameState.ENTER_SALVO;
+                if (myTurn > opTurn)
+                    return GameState.WAIT;
+            }
+
+            //enter salvo and wait of joined
+            if (!creator)
+            {
+                if (myTurn < opTurn)
+                    return GameState.ENTER_SALVO;
+                if (myTurn >= opTurn)
+                    return GameState.WAIT;
+            }
+
+            return GameState.ENTER_SALVO;
         }
     }
 }

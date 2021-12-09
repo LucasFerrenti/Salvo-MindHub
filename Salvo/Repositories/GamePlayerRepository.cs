@@ -9,45 +9,41 @@ namespace Salvo.Repositories
 {
     public class GamePlayerRepository : RepositoryBase<GamePlayer>, IGamePlayerRepository
     {
-        public GamePlayerRepository(SalvoContex repositoryContext) : base (repositoryContext)
+        public GamePlayerRepository(SalvoContext repositoryContext) : base (repositoryContext)
         {
 
         }
         public GamePlayer FindById(long id)
         {
-            GamePlayer gamePlayer = FindByCondition(gp => gp.Id ==id)                   
-                    .Include(gp => gp.Player)
-                    .Include(gp => gp.Ships)
-                    .Include(gp => gp.Salvos)
-                    .Include(gp => gp.Game)
-                        .ThenInclude(game => game.GamePlayers)
-                            .ThenInclude(gps => gps.Salvos)
-                    .Include(gp => gp.Game)
-                        .ThenInclude(game => game.GamePlayers)
-                            .ThenInclude(gps => gps.Ships)
+            return FindByCondition(gp => gp.Id ==id)
+                .Include(gp => gp.Player)
+                .Include(gp => gp.Game)
+                    .ThenInclude(game => game.GamePlayers)
+                        .ThenInclude(gps => gps.Salvos)
+                            .ThenInclude(salvos => salvos.Locations)
+                .Include(gp => gp.Game)
+                    .ThenInclude(game => game.GamePlayers)
+                        .ThenInclude(gps => gps.Ships)
+                            .ThenInclude(ships => ships.Locations)
                 .FirstOrDefault();
-            return gamePlayer;
         }
-        public GamePlayer GetGamePlayerView(int idGamePlayer)
+        public GamePlayer GetGamePlayerView(long idGamePlayer)
         {
-            return FindAll(source => source.Include(gamePlayer => gamePlayer.Ships)
-                                                .ThenInclude(ship => ship.Locations)
-                                            .Include(gamePlayer => gamePlayer.Salvos)
-                                                .ThenInclude(salvo => salvo.Locations)
-                                            .Include(gamePlayer => gamePlayer.Game)
-                                                .ThenInclude(game => game.GamePlayers)
-                                                    .ThenInclude(gp => gp.Player)
-                                            .Include(gamePlayer => gamePlayer.Game)
-                                                .ThenInclude(game => game.GamePlayers)
-                                                    .ThenInclude(gp => gp.Salvos)
-                                                    .ThenInclude(salvo => salvo.Locations)
-                                            .Include(gamePlayer => gamePlayer.Game)
-                                                .ThenInclude(game => game.GamePlayers)
-                                                    .ThenInclude(gp => gp.Ships)
-                                                    .ThenInclude(ship => ship.Locations))
-                                    .Where(gamePlayer => gamePlayer.Id == idGamePlayer)
-                                    .OrderBy(game => game.JoinDate)
-                                    .FirstOrDefault();
+            return FindAll(source => source
+                .Include(gamePlayer => gamePlayer.Game)
+                    .ThenInclude(game => game.GamePlayers)
+                        .ThenInclude(gp => gp.Player)
+                .Include(gamePlayer => gamePlayer.Game)
+                    .ThenInclude(game => game.GamePlayers)
+                        .ThenInclude(gp => gp.Salvos)
+                            .ThenInclude(salvo => salvo.Locations)
+                .Include(gamePlayer => gamePlayer.Game)
+                    .ThenInclude(game => game.GamePlayers)
+                        .ThenInclude(gp => gp.Ships)
+                            .ThenInclude(ship => ship.Locations))
+                .Where(gamePlayer => gamePlayer.Id == idGamePlayer)
+                .OrderBy(game => game.JoinDate)
+                .FirstOrDefault();
         }
         public void Save(GamePlayer gamePlayer)
         {

@@ -8,7 +8,7 @@ namespace Salvo.Repositories
 {
     public class PlayerRepository : RepositoryBase<Player>, IPlayerRepository
     {
-        public PlayerRepository(SalvoContex repositiryContext): base(repositiryContext)
+        public PlayerRepository(SalvoContext repositiryContext): base(repositiryContext)
         {
 
         }
