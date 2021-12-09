@@ -7,6 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
     <link rel="stylesheet" href="css/salvo.css" />
     <link rel="stylesheet" href="dist/normalize.css" />
     <link rel="stylesheet" href="dist/gridstack.css" />
@@ -70,7 +71,7 @@
                     </div>
                     <div class="row mt-1">
                         <div class="col">
-                            <button v-if="gameView.ships && gameView.ships.length >= 5" class="btn btn-success btn-sm mb-3" v-on:click="placeSalvos()">Disparar salvos!!</button>
+                            <button v-if="gameView.gameState == 'ENTER_SALVO'" class="btn btn-success btn-sm mb-3" v-on:click="placeSalvos()">Disparar salvos!!</button>
                             <table class="salvo-table">
                                 <thead>
                                     <tr>
@@ -222,6 +223,19 @@
                             </table>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="game-state">
+                                <span>{{gameState}}</span>
+                                <div v-if="gameView.gameState == 'WAIT'" class="img-state img-state-wait"></div>
+                                <div v-else-if="gameView.gameState == 'PLACE_SHIPS'" class="img-state img-state-ship"></div>
+                                <div v-else-if="gameView.gameState == 'ENTER_SALVO'" class="img-state img-state-fire"></div>
+                                <div v-else-if="gameView.gameState == 'WIN'" class="img-state img-state-win"></div>
+                                <div v-else-if="gameView.gameState == 'LOSS'" class="img-state img-state-loss"></div>
+                                <div v-else-if="gameView.gameState == 'TIE'" class="img-state img-state-tie"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row mt-2">
@@ -229,7 +243,7 @@
                     <div class="row">
                         <div class="col">
                             <table class="table table-sm table-dark table-striped">
-                                <thead>
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>Turno</th>
                                         <th>Daños</th>
@@ -245,7 +259,7 @@
                         </div>
                         <div class="col">
                             <table class="table table-sm table-dark table-striped">
-                                <thead>
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>Turno</th>
                                         <th>Daños</th>

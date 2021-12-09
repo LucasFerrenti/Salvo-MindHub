@@ -101,6 +101,7 @@ namespace Salvo.Controllers
         {
             try
             {
+                //get player
                 var userClaim = User.FindFirst("Player");
                 var email = userClaim == null ? "Guest" : userClaim.Value;
                 Player player = _playerRepository.FindByEmail(email);

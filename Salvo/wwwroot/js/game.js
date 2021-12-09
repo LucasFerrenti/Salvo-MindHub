@@ -2,9 +2,11 @@
     el: '#app',
     data: {
         games: [],
+        openGames: [],
         scores: [],
         email: "",
         password: "",
+        user: "",
         modal: {
             tittle: "",
             message: ""
@@ -15,6 +17,9 @@
         this.getGames();
     },
     methods: {
+        history(){
+            window.location.href = '/history.html';
+        },
         joinGame(gId) {
             var gpId = null;
             axios.post('/api/games/' + gId + '/players')
@@ -34,7 +39,7 @@
                     window.location.href = '/game.html?gp=' + gpId;
                 })
                 .catch(error => {
-                    alert("erro al obtener los datos");
+                    alert("error al obtener los datos");
                 });
         },
         returnGame(gpId) {
@@ -46,9 +51,14 @@
                 .then(response => {
                     this.player = response.data.email;
                     this.games = response.data.games;
+                    this.openGames = this.getOpenGames(this.games);
                     this.getScores(this.games)
-                    if (this.player == "Guest")
+                    if (this.player == "Guest"){
                         this.showLogin(true);
+                    }
+                    else{
+                        $("#logout-btn").show();
+                    }
                 })
                 .catch(error => {
                     alert("erro al obtener los datos");
@@ -66,6 +76,8 @@
                 $("#login-form").trigger("reset");
                 this.email = "";
                 this.password = "";
+                this.user = "";
+                $("#logout-btn").hide();
             }
             else
                 $("#login-form").hide();
@@ -84,7 +96,7 @@
         },
         login: function(event){
             axios.post('/api/auth/login', {
-                email: this.email, password: this.password
+                email: this.email, password: this.password, user: this.user
             })
                 .then(result => {
                     if (result.status == 200) {
@@ -108,7 +120,7 @@
         },
         signin: function (event) {
             axios.post('/api/players', {
-                email: this.email, password: this.password
+                email: this.email, password: this.password, user: this.user
             })
                 .then(result => {
                     if (result.status == 201) {
@@ -167,6 +179,15 @@
                 })
             })
             app.scores = scores;
+        },
+        getOpenGames: function(games){
+            let openGames = [];
+            games.forEach(game =>{
+                if(game.gamePlayers[0].point == null){
+                    openGames.push(game);
+                }
+            })
+            return openGames;
         }
     },
     filters: {

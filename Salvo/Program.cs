@@ -24,7 +24,7 @@ namespace Salvo
 
                 try
                 {
-                    var context = services.GetRequiredService<SalvoContex>();
+                    var context = services.GetRequiredService<SalvoContext>();
                     // using ContosoUniversity.Data; 
                     DbInitializer.Initialize(context);
                 }

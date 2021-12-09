@@ -16,11 +16,13 @@ namespace Salvo.Controllers
     [Authorize("PlayerOnly")]
     public class GamePlayersController : ControllerBase
     {
-        private IGamePlayerRepository _repository;
+        private IGamePlayerRepository _gpRepository;
+        private IScoreRepository _scoreRepository;
 
-        public GamePlayersController(IGamePlayerRepository repository)
+        public GamePlayersController(IGamePlayerRepository gpRepository, IScoreRepository scoreRepository)
         {
-            _repository = repository;
+            _gpRepository = gpRepository;
+            _scoreRepository = scoreRepository;
         }
 
         [HttpGet("{id}", Name ="GetGameView")]
@@ -30,16 +32,16 @@ namespace Salvo.Controllers
             {
                 var userEmail = User.FindFirst("Player").Value;
 
-                var gp = _repository.GetGamePlayerView(id);
+                var gp = _gpRepository.GetGamePlayerView(id);
 
-                if (gp.Player.Email != userEmail)
+                
+                if (gp?.Player.Email != userEmail)
                     return Forbid();
 
                 var gameView = new GameViewDTO
                 {
                     Id = gp.Id,
                     CreationDate = gp.Game.CreationDate,
-
                     GamePlayers = gp.Game.GamePlayers.Select(gps => new GamePlayerDTO
                     {
                         Id = gps.Id,
@@ -50,7 +52,6 @@ namespace Salvo.Controllers
                             Email = gps.Player.Email
                         }
                     }).ToList(),
-
                     Ships = gp.Ships.Select(ship => new ShipDTO
                     {
                         Id = ship.Id,
@@ -61,7 +62,6 @@ namespace Salvo.Controllers
                             Location = location.Location
                         }).ToList()
                     }).ToList(),
-
                     Salvos = gp.Game.GamePlayers.SelectMany(gps => gps.Salvos.Select(salvo => new SalvoDTO
                     {
                         Id = salvo.Id,
@@ -77,11 +77,12 @@ namespace Salvo.Controllers
                             Location = location.Location
                         }).ToList()
                     })).ToList(),
-
                     Hits = gp.GetHits(),
                     HitsOpponent = gp.GetOponent()?.GetHits(),
-                    Sunks = gp.GetSunks(),
-                    SunksOpponent = gp.GetOponent()?.GetSunks()
+                    Sunks = gp.
+                    GetSunks(),
+                    SunksOpponent = gp.GetOponent()?.GetSunks(),
+                    GameState = Enum.GetName(typeof(GameState), gp.GetGameState())
                 };
 
                 return Ok(gameView);
@@ -91,24 +92,34 @@ namespace Salvo.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
         [HttpPost("{id}/ships")]
         public IActionResult Post(long id, [FromBody]List<ShipDTO> ships)
         {
             try
             {
                 //check gp exist
-                GamePlayer gp = _repository.FindById(id);
+                GamePlayer gp = _gpRepository.FindById(id);
                 if (gp == null)
                     return StatusCode(403, "No existe el juego");
+
                 //check player
                 var userClaim = User.FindFirst("Player");
                 var userEmail = userClaim == null ? "Guest" : userClaim.Value;
                 if (gp.Player.Email != userEmail)
                     return StatusCode(403, "El usuario no se encuentra en el juego");
+
                 //check ships
-                if (gp.Ships.Count >= 5)
+                if (gp.Ships.Count == 5)
                     return StatusCode(403, "Ya se han posicionado los barcos");
-                //save ships
+                
+                //check ships input
+                if (ships.Count != 5)
+                {
+                    return StatusCode(403, "Solo se pueden colocar 5 barcos");
+                }
+                
+                //save
                 gp.Ships = ships.Select(ships => new Ship
                 {
                     GamePlayerId = gp.Id,
@@ -119,7 +130,7 @@ namespace Salvo.Controllers
                         Location = loc.Location
                     }).ToList(),
                 }).ToList();
-                _repository.Save(gp);
+                _gpRepository.Save(gp);
                 return StatusCode(201, "barcos posicionados!!");
             }
             catch (Exception e)
@@ -134,7 +145,7 @@ namespace Salvo.Controllers
             try
             {
                 //check gp exist
-                GamePlayer gamePlayer = _repository.FindById(id);
+                GamePlayer gamePlayer = _gpRepository.FindById(id);
                 if (gamePlayer == null)
                     return StatusCode(403, "No existe el juego");
 
@@ -143,6 +154,11 @@ namespace Salvo.Controllers
                 var userEmail = userClaim == null ? "Guest" : userClaim.Value;
                 if (gamePlayer.Player.Email != userEmail)
                     return StatusCode(403, "El usuario no se encuentra en el juego");
+
+                //check game state
+                var finishStates = new List<GameState> { GameState.WIN, GameState.LOSS, GameState.TIE };
+                if (finishStates.Contains(gamePlayer.GetGameState()))
+                    return StatusCode(403, "Juego finalizado");
 
                 //check oponent
                 GamePlayer oponent = gamePlayer.GetOponent();
@@ -156,17 +172,19 @@ namespace Salvo.Controllers
                     return StatusCode(403, "Falta posicionar los barcos del oponente");
 
                 //check turns
-                GamePlayer creator = gamePlayer.Game.CreationDate == gamePlayer.JoinDate ? gamePlayer : oponent;
+                var creator = gamePlayer.JoinDate == gamePlayer.Game.CreationDate;
                 int gpTurn = gamePlayer.Salvos.Count;
                 int opTurn = oponent.Salvos.Count;
                 int diffTurn = gpTurn - opTurn;
-                
-                //save
-                if (creator == gamePlayer && diffTurn >= 1 || creator == oponent && diffTurn >= 0)
-                {
-                    return StatusCode(403, "no se puede adelantar");
-                }
 
+                if (creator && diffTurn >= 1 || !creator && diffTurn >= 0)
+                    return StatusCode(403, "no se puede adelantar");
+
+                //check salvos
+                if (salvo.Locations.Count != 5)
+                    return StatusCode(403, "Solo se Pueden Ingresar 5 salvos");
+
+                //save
                 gamePlayer.Salvos.Add(new Models.Salvo
                 {
                     GamePlayerId = gamePlayer.Id,
@@ -176,14 +194,43 @@ namespace Salvo.Controllers
                     }).ToList(),
                     turn = gpTurn + 1
                 });
-                
-                _repository.Save(gamePlayer);
+                _gpRepository.Save(gamePlayer);
+
+                //check game state and save the score
+                switch (gamePlayer.GetGameState())
+                {
+                    case GameState.WIN:
+                        SubmitScore(1, gamePlayer);
+                        SubmitScore(0, oponent);
+                        break;
+                    case GameState.LOSS:
+                        SubmitScore(0, gamePlayer);
+                        SubmitScore(1, oponent);
+                        break;
+                    case GameState.TIE:
+                        SubmitScore(0.5, gamePlayer);
+                        SubmitScore(0.5, oponent);
+                        break;
+                }
+
                 return StatusCode(201, "salvos disparados!!");
             }
             catch (Exception e)
             {
                 return StatusCode(500, e.Message);
             }
+        }
+
+        private void SubmitScore(double point, GamePlayer gp)
+        {
+            var score = new Score
+            {
+                Point = point,
+                PlayerId = gp.PlayerID,
+                GameId = gp.GameID,
+                FinishDate = DateTime.Now
+            };
+            _scoreRepository.Save(score);
         }
     }
 }

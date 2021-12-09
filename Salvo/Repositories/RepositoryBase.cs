@@ -11,8 +11,8 @@ namespace Salvo.Repositories
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected SalvoContex RepositoryContext { get; set; }
-        public RepositoryBase(SalvoContex repositoryContext)
+        protected SalvoContext RepositoryContext { get; set; }
+        public RepositoryBase(SalvoContext repositoryContext)
         {
             this.RepositoryContext = repositoryContext;
         }
