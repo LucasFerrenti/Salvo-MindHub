@@ -14,7 +14,7 @@
     <div id="app">
         <!-- Image and text -->
         <nav class="navbar navbar-light bg-light navbar-expand-md">
-            <a v-on:click="back()" class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/index.html">
                 <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
                 Salvo
             </a>
@@ -30,7 +30,7 @@
                     <input v-model:value="email" class="form-control mr-sm-2" type="email" placeholder="Email" aria-label="Email">
                     <input v-model:value="password" class="form-control mr-sm-2" type="password" placeholder="Contrase&ntilde;a" aria-label="Contraseña">
                     <button v-on:click="login" id="login-btn" class="btn btn-outline-success my-2 my-sm-0" type="button">Login</button>
-                    <button v-on:click="signin" id="signin-btn" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Registro</button>
+                    <button v-on:click="registerPage" id="signin-btn" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Registro</button>
                 </form>
                 <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
             </div>
@@ -87,20 +87,20 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade " id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="infoModalCenterTitle">{{ modal.tittle }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+        <div class="modal fade " id="infoModal" role="dialog" aria-labelledby="infoModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+                <div class="modal-content text-center" style="border: none">
+                    <!--Header-->
+                    <div class="modal-header justify-content-center" style="background-color: #ff3547;">
+                        <p class="heading m-0" style="color: #fff; font-size: 20px;">{{modal.tittle}}</p>
                     </div>
+                    <!--Body-->
                     <div class="modal-body">
-                        <p>{{ modal.message }}</p>
+                        <i>{{modal.message}}</i>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" class="btn btn-danger" style="color: #fff;" data-dismiss="modal">Ok</a>
                     </div>
                 </div>
             </div>

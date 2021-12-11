@@ -22,23 +22,24 @@ namespace Salvo.Controllers
             _repository = repository;
         }
 
-        [HttpGet("{id}", Name = "GetPlayer")]
-        public void GetPlayer()
-        {
-
-        }
-
         [HttpPost]
         public IActionResult Post([FromBody] PlayerDTO player)
         {
             try
             {
-                //Check data
-                var result = CheckPlayerData(player);
-                if (result.Value.ToString() != "Usuario validado")
-                {
-                    return result;
-                }
+                //validate email
+                if (!ValidateEmail(player.Email))
+                    return StatusCode(403, "Email invalido");
+                //check is available
+                Player dbPlayer = _repository.FindByEmail(player.Email);
+                if (dbPlayer != null)
+                    return StatusCode(403, "Email en uso");
+                //validate user
+                if (!ValidateUser(player.User))
+                    return StatusCode(403, "Usuario invalido");
+                //validate password
+                if (!ValidatePassword(player.Password))
+                    return StatusCode(403, "Contraceña invalida");
                 //Create player
                 Player newPlayer = new Player
                 {
@@ -56,63 +57,58 @@ namespace Salvo.Controllers
                 return StatusCode(500, e.Message);
             }
         }
-        private ObjectResult CheckPlayerData(PlayerDTO player)
+
+        [HttpGet("available/{Email}", Name = "available")]
+        public IActionResult Available(string email)
         {
-            //Check Email--
-            //Check input
-            if (String.IsNullOrEmpty(player.Email))
-                return StatusCode(403, "Email vacio");
+            try
+            {
+                //check email
+                if (!ValidateEmail(email))
+                    return StatusCode(201, false);
+                //search an return email status
+                Player dbPlayer = _repository.FindByEmail(email);
+                if (dbPlayer == null)
+                    return StatusCode(201, true);
+                else
+                    return StatusCode(201, false);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
 
+        private bool ValidateEmail(string email)
+        {
             //Check format
-            player.Email = player.Email.ToLower(); //optional. It is to save all emails in lowercase.
+            email = email.ToLower(); //optional. It is to save all emails in lowercase.
             Regex emailPattern = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.\w{2,3})+)$");
-            Match checkEmail = emailPattern.Match(player.Email);
+            Match checkEmail = emailPattern.Match(email);
             if (!checkEmail.Success)
-                return StatusCode(403, "Email invalido");
+                return false;
 
-            //Check if available
-            Player dbPlayer = _repository.FindByEmail(player.Email);
-            if (dbPlayer != null)
-                return StatusCode(403, "Email en uso");
+            return true;
+        }
+        private bool ValidateUser(string user)
+        {
+            //check min length
+            if (user.Length < 4)
+                return false;
+            //check max length
+            if (user.Length > 16)
+                return false;
 
-            //Check password--
-            //FULL REGEX FOR THE PASSWORD @"^((?=.*\d)|(?=.*\W+))(?=.*[a-z])(?=.*[A-Z])(?![.\n]).{8,16}$"
-            //Check Input
-            if (String.IsNullOrEmpty(player.Password))
-                return StatusCode(403, "Contraseña vacia");
+            return true;
+        }
+        private bool ValidatePassword(string password)
+        {
 
-            //Check Length
-            if (player.Password.Length > 16)
-                return StatusCode(403, "Contraseña Invalida:\nDebe contener menos de 16 caracteres");
-            if (player.Password.Length < 8)
-                return StatusCode(403, "Contraseña Invalida:\nDebe contener al menos 8 caracteres");
-
-            //Check uppercase
-            Match checkMayus = new Regex(@"(?=.*[A-Z]).").Match(player.Password);
-            if (!checkMayus.Success)
-                return StatusCode(403, "Contraseña Invalida:\nDebe contener al menos una letra mayuscula");
-
-            //Check lowercase
-            Match checkMinus = new Regex(@"(?=.*[a-z]).").Match(player.Password);
-            if (!checkMinus.Success)
-                return StatusCode(403, "Contraseña Invalida:\nDebe contener al menos una letra minuscula");
-
-            //Check number or special characters
-            Match checkNumSpe = new Regex(@"((?=.*\d)|(?=.*\W+)).").Match(player.Password);
-            if (!checkNumSpe.Success)
-                return StatusCode(403, "Contraseña Invalida:\nDebe contener al menos un numero o caracter especial");
-
-            //Check new line
-            Match checkNewLine = new Regex(@"(?=.*\n).").Match(player.Password);
-            if (checkNewLine.Success)
-                return StatusCode(403, "Contraseña Invalida:\nNo puede contener saltos de linea");
-
-            //Check user
-            if (String.IsNullOrEmpty(player.User))
-                return StatusCode(403, "Usuario Invalido");
-
-            //passed all verifications
-            return Ok("Usuario validado");
+            Regex passwordPattern = new Regex(@"^((?=.*\d)|(?=.*\W+))(?=.*[a-z])(?=.*[A-Z])(?![.\n]).{8,100}$");
+            Match checkPasswor = passwordPattern.Match(password);
+            if (!checkPasswor.Success)
+                return false;
+            return true;
         }
     }
 }

@@ -28,6 +28,9 @@
         back(){
             window.location.href = '/index.html';
         },
+        registerPage(){
+            window.location.href = '/register.html';
+        },
         getGames: function (){
             this.showLogin(false);
             axios.get('/api/games')
@@ -92,29 +95,6 @@
                     if (error.response.status == 401) {
                         this.modal.tittle = "Falló la autenticación";
                         this.modal.message = "Email o contraseña inválido"
-                        this.showModal(true);
-                    }
-                    else {
-                        this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
-                        this.modal.message = "Ha ocurrido un error";
-                        this.showModal(true);
-                    }
-                });
-        },
-        signin: function (event) {
-            axios.post('/api/players', {
-                email: this.email, password: this.password, user: this.user
-            })
-                .then(result => {
-                    if (result.status == 201) {
-                        this.login();
-                    }
-                })
-                .catch(error => {
-                    console.log("error, código de estatus: " + error.response.status);
-                    if (error.response.status == 403) {
-                        this.modal.tittle = "Falló el registro";
-                        this.modal.message = error.response.data
                         this.showModal(true);
                     }
                     else {

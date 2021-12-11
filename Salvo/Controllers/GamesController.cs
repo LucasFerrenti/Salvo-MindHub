@@ -44,7 +44,8 @@ namespace Salvo.Controllers
                             Player = new PlayerDTO
                             {
                                 Id = gp.Player.Id,
-                                Email = gp.Player.Email
+                                Email = gp.Player.Email,
+                                User = gp.Player.Name
                             },
                             Point = gp.GetScore()
                         }).ToList()

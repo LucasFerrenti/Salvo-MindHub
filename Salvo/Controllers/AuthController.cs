@@ -32,8 +32,10 @@ namespace Salvo.Controllers
             try
             {
                 Player user = _repository.FindByEmail(player.Email);
+                if (user == null)
+                    return StatusCode(401, "Unauthorized: Email invalido");
                 if (user == null || !String.Equals(user.Password, player.Password))
-                    return Unauthorized();
+                    return StatusCode(401, "Unauthorized: Contraceña incorrecta");
 
                 var claims = new List<Claim>
                     {
@@ -71,5 +73,25 @@ namespace Salvo.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        //GetAuth
+        // POST: api/Auth/getauth
+        [HttpGet("getauth")]
+
+        public IActionResult GetAuth()
+        {
+            try
+            {
+                var userClaim = User.FindFirst("Player");
+                var a = userClaim == null ? "Guest" : userClaim.Value;
+                return StatusCode(201, a);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+                throw;
+            }
+        }
+
     }
 }
