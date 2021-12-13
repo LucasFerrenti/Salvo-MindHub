@@ -13,18 +13,19 @@
     <link rel="stylesheet" href="dist/gridstack.css" />
     <link rel="stylesheet" href="dist/gridstack-extra.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
     <title>Salvo games!</title>
 </head>
 <body>
     <div id="app">
         <!-- Image and text -->
         <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/index.html">
                 <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
                 Salvo
                 <div id="playersList">
-                    <span id="playerOne">{{ player.email }}</span>
-                    <span v-if="opponent.email != null"> vs {{ opponent.email }}</span>
+                    <span class="game-text" id="playerOne">{{ player.email }}</span>
+                    <span class="game-text" v-if="opponent.email != null"> vs {{ opponent.email }}</span>
                 </div>
             </a>
             <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
@@ -34,7 +35,7 @@
                 <div class="col">
                     <div class="row">
                         <div class="col">
-                            <h2>Barcos</h2>
+                            <h1 class="title">Barcos</h1>
                             <div class="shipsStatus">
                                 <span><img id="CarrierIcon" src="img/carrierafloat.png"></span>
                                 <span><img id="BattleShipIcon" src="img/battleshipafloat.png"></span>
@@ -50,7 +51,7 @@
                             <div class="grid-ships">
                                 <!-- div que usa la librería gridstack grid-stack-10 se indica que son 10 columnas-->
                                 <div id="grid" class="grid-stack grid-stack-10">
-
+                                     
                                 </div>
                             </div>
                         </div>
@@ -59,7 +60,7 @@
                 <div class="col">
                     <div class="row">
                         <div class="col">
-                            <h2>Salvos</h2>
+                            <h1 class="title">Salvos</h1>
                             <div class="shipsStatus">
                                 <span><img id="OpponentCarrierIcon" src="img/carrierafloat.png"></span>
                                 <span><img id="OpponentBattleShipIcon" src="img/battleshipafloat.png"></span>
@@ -242,8 +243,8 @@
                 <div class="col">
                     <div class="row">
                         <div class="col">
-                            <table class="table table-sm table-dark table-striped">
-                                <thead class="thead-dark">
+                            <table class="table table-sm table-dark table-striped table-borderless rounded-lg">
+                                <thead>
                                     <tr>
                                         <th>Turno</th>
                                         <th>Daños</th>
@@ -258,8 +259,8 @@
                             </table>
                         </div>
                         <div class="col">
-                            <table class="table table-sm table-dark table-striped">
-                                <thead class="thead-dark">
+                            <table class="table table-sm table-dark table-striped table-borderless rounded-lg">
+                                <thead>
                                     <tr>
                                         <th>Turno</th>
                                         <th>Daños</th>

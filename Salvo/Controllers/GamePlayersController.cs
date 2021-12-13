@@ -220,7 +220,6 @@ namespace Salvo.Controllers
                 return StatusCode(500, e.Message);
             }
         }
-
         private void SubmitScore(double point, GamePlayer gp)
         {
             var score = new Score

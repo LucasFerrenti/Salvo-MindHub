@@ -137,11 +137,30 @@ var app = new Vue({
             else
                 passwordForm.removeClass("is-valid").addClass("is-invalid");
         },
-        checkRegisterForm(){
+        async checkRegisterForm(){
             //check is successful
-            if ($(".is-valid").length < 3)
+            let valids = $(".is-valid");
+            console.log(valids.length);
+            if (valids.length < 3)
                 return;
-            this.signin();
+            $("#signin-btn").attr("disabled", "disabled")
+            $("#cancel-btn").attr("disabled", "disabled")
+            valids.each(function () {
+                $(this).removeClass("is-valid");
+                $(this).attr("disabled", "disabled")
+            });
+            this.showLoadingModal(true);
+            await this.delay(500)
+
+            await this.signin();
+            
+            this.showLoadingModal(false);
+            $("#signin-btn").removeAttr("disabled");
+            $("#cancel-btn").removeAttr("disabled");
+            valids.each(function () {
+                $(this).removeAttr("disabled");
+                $(this).val("");
+            });
         },
         back() {
             window.location.href = '/index.html';
@@ -152,38 +171,18 @@ var app = new Vue({
             else
                 $("#infoModal").modal('hide');
         },
-        login: function (event) {
-            axios.post('/api/auth/login', {
-                email: this.email, password: this.password, user: this.user
-            })
-                .then(result => {
-                    if (result.status == 200) {
-                        this.showLogin(false);
-                    }
-                })
-                .catch(error => {
-                    console.log("error, código de estatus: " + error.response.status);
-                    if (error.response.status == 401) {
-                        this.modal.tittle = "Falló la autenticación";
-                        this.modal.message = "Email o contraseña inválido"
-                        this.showModal(true);
-                    }
-                    else {
-                        this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
-                        this.modal.message = "Ha ocurrido un error";
-                        this.showModal(true);
-                    }
-                });
+        showLoadingModal(show){
+            if (show)
+                $("#loadingModal").modal('show');
+            else
+                $("#loadingModal").modal('hide');
         },
-        signin: function (event) {
-            axios.post('/api/players', {
+        signin: async function (event) {
+            await axios.post('/api/players', {
                 email: this.email, password: this.password, user: this.user
             })
-                .then(result => {
-                    if (result.status == 201) {
-                        this.login();
-                        location.href = "/index.html"
-                    }
+                .then(result =>{
+                    this.back()
                 })
                 .catch(error => {
                     console.log("error, código de estatus: " + error.response.status);
@@ -192,6 +191,11 @@ var app = new Vue({
                     this.showModal(true);
                 });
         },
+        delay(ms){
+            return new Promise(function(resolve){
+            setTimeout(resolve,ms);
+            });
+        }
     },
 });
 

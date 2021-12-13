@@ -32,11 +32,16 @@ namespace Salvo.Controllers
             try
             {
                 Player user = _repository.FindByEmail(player.Email);
+                // check player exist
                 if (user == null)
                     return StatusCode(401, "Unauthorized: Email invalido");
-                if (user == null || !String.Equals(user.Password, player.Password))
+                // check password
+                if (!String.Equals(user.Password, player.Password))
                     return StatusCode(401, "Unauthorized: Contraceña incorrecta");
-
+                // check is active
+                if (!user.IsActive)
+                    return StatusCode(403, "Usuario sin activar, verifique su correo electronico para activarlo");
+                //login
                 var claims = new List<Claim>
                     {
                         new Claim("Player", user.Email)
@@ -77,7 +82,6 @@ namespace Salvo.Controllers
         //GetAuth
         // POST: api/Auth/getauth
         [HttpGet("getauth")]
-
         public IActionResult GetAuth()
         {
             try
@@ -92,6 +96,5 @@ namespace Salvo.Controllers
                 throw;
             }
         }
-
     }
 }

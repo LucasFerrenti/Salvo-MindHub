@@ -47,7 +47,8 @@ namespace Salvo.Controllers
                                 Email = gp.Player.Email,
                                 User = gp.Player.Name
                             },
-                            Point = gp.GetScore()
+                            Point = gp.GetScore(),
+                            GameState = Enum.GetName(typeof(GameState), gp.GetGameState())
                         }).ToList()
                     }).ToList();
                 //get email

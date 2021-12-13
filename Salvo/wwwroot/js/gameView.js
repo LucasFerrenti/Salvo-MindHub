@@ -9,7 +9,11 @@ var app = new Vue({
         opponent: { email: null },
         salvoCount: 0,
         gameState: "",
-        interval: null
+        interval: null,
+        modal: {
+            tittle: "",
+            message: ""
+        },
     },
     mounted() {
         axios.get('/api/gamePlayers/' + gpId)
@@ -31,10 +35,10 @@ var app = new Vue({
     },
     methods: {
         getGameData: function () {
-            if(this.gameView.gameState == 'ENTER_SALVO'){
+            if (this.gameView.gameState == 'ENTER_SALVO') {
                 app.salvoCount = 0;
             }
-            else{
+            else {
                 app.salvoCount = 5;
             }
             placeSalvos(this.gameView.salvos, this.player.id, this.gameView.ships);
@@ -42,7 +46,7 @@ var app = new Vue({
             placeHits(this.gameView.hits);
             this.gameState = getGameState(this.gameView.gameState);
             if (this.gameView.gameState == 'WAIT') {
-                if (this.interval == null){
+                if (this.interval == null) {
                     this.interval = setInterval(this.refresh, 10000);
                 }
             }
@@ -115,25 +119,20 @@ var app = new Vue({
 
             if (this.salvoCount == 5) {
                 var cellsArray = [];
-
-                //$(".salvo.shoot").each(function () {
-                //    if (!$(this).hasClass("shooted")) {
-                //        cellsArray.push({ id: 0, location: $(this).attr("id") });
-                //        $(this).removeClass('shoot');
-                //    }
-                //})
                 $(".salvo.shoot").each(function () {
                     cellsArray.push({ id: 0, location: $(this).attr("id") });
                     $(this).removeClass('shoot');
                 })
-                var salvo = new Object();
-                salvo.id = 0;
-                salvo.turn = 0;
-                salvo.locations = cellsArray;
-                this.postSalvos(salvo);
+                    var salvo = new Object();
+                    salvo.id = 0;
+                    salvo.turn = 0;
+                    salvo.locations = cellsArray;
+                    this.postSalvos(salvo);
             }
             else {
-                alert("error: debe indicar todas las posiciones de los salvos");
+                this.modal.tittle = "Error en los salvos ";
+                this.modal.message = "Debe indicar 5 posiciones";
+                this.showModal(true);
             }
         },
         postSalvos: function (salvos) {
@@ -142,10 +141,18 @@ var app = new Vue({
                     app.refresh();
                 })
                 .catch(error => {
-                    alert("error: " + error.response.data);
+                    this.modal.tittle = "Error " + error.response.status;
+                    this.modal.message = error.response.data;
+                    this.showModal(true);
                     app.salvoCount = 0
                 });
-        }
+        },
+        showModal: function (show) {
+            if (show)
+                $("#infoModal").modal('show');
+            else
+                $("#infoModal").modal('hide');
+        },
     }
 })
 

@@ -9,7 +9,7 @@ namespace Salvo.Models
     {
         public long Id { get; set; }
         public int turn { get; set; }
-        public PlayerDTO Player { get; set; }
+        public PlayerDTO? Player { get; set; }
         public ICollection<SalvoLocationDTO> Locations { get; set; }
     }
 }

@@ -17,32 +17,32 @@
         this.getGames();
     },
     methods: {
-        renderGlobalTable(){
+        renderGlobalTable() {
             this.playerTable = "";
             this.getGames()
         },
-        renderPlayerTable(){
+        renderPlayerTable() {
             this.playerTable = "true";
             this.getGames()
         },
-        back(){
+        back() {
             window.location.href = '/index.html';
         },
-        registerPage(){
+        registerPage() {
             window.location.href = '/register.html';
         },
-        getGames: function (){
+        getGames: function () {
             this.showLogin(false);
             axios.get('/api/games')
                 .then(response => {
                     this.player = response.data.email;
                     this.games = response.data.games;
                     this.historyGames = this.getHistoryGames(this.games);
-                    if (this.player == "Guest"){
+                    if (this.player == "Guest") {
                         this.showLogin(true);
                         this.playerTable = "";
                     }
-                    else{
+                    else {
                         $("#logout-btn").show();
                     }
                 })
@@ -80,9 +80,9 @@
                     alert("Ocurrió un error al cerrar sesión");
                 });
         },
-        login: function(event){
+        login: function (event) {
             axios.post('/api/auth/login', {
-                email: this.email, password: this.password, user: this.user
+                email: this.email, password: this.password, user: ""
             })
                 .then(result => {
                     if (result.status == 200) {
@@ -93,32 +93,32 @@
                 .catch(error => {
                     console.log("error, código de estatus: " + error.response.status);
                     if (error.response.status == 401) {
-                        this.modal.tittle = "Falló la autenticación";
-                        this.modal.message = "Email o contraseña inválido"
+                        this.modal.tittle = "Fallo de autenticacion";
+                        this.modal.message = error.response.data;
                         this.showModal(true);
                     }
                     else {
-                        this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
-                        this.modal.message = "Ha ocurrido un error";
+                        this.modal.tittle = "Error " + error.response.status;
+                        this.modal.message = error.response.data;
                         this.showModal(true);
                     }
                 });
         },
-        getHistoryGames: function(games){
+        getHistoryGames: function (games) {
             let historyGames = [];
             games.forEach(game => {
-                let historyGame = {gameId: 0, player1: "", player2: "", status: "", creationDate:""};
+                let historyGame = { gameId: 0, player1: "", player2: "", status: "", creationDate: "" };
                 historyGame.gameId = game.id;
-                historyGame.player1 = game.gamePlayers[0].player.email;
-                if(game.gamePlayers.length >= 2){
-                    historyGame.player2 = game.gamePlayers[1].player.email;
+                historyGame.player1 = game.gamePlayers[0]?.player.email;
+                if (game.gamePlayers.length >= 2) {
+                    historyGame.player2 = game.gamePlayers[1]?.player.email;
                 }
-                else{
+                else {
                     historyGame.player2 = "Esperando oponente";
                 }
-                switch (game.gamePlayers[0].point){
+                switch (game.gamePlayers[0]?.point) {
                     case 0:
-                        historyGame.status = "Gano " + historyGame.player2 ;
+                        historyGame.status = "Gano " + historyGame.player2;
                         break;
                     case 1:
                         historyGame.status = "Gano " + historyGame.player1;
@@ -126,7 +126,7 @@
                     case 0.5:
                         historyGame.status = "Empate";
                         break;
-                    case null:
+                    default:
                         historyGame.status = "En Progreso";
                 }
                 historyGame.creationDate = game.creationDate;

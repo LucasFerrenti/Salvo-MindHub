@@ -61,9 +61,7 @@
     width: 42px !important;
 }
 
-
 .grid-ships {
-    border: solid black;
     height: 450px;
     width: 450px;
     background-image: url('../img/grid-bkg.png');
@@ -74,7 +72,6 @@
 }
 
 .salvo-table{
-    border: solid black 1px;
     background-image: url('../img/backships.gif');
     background-size: contain;
 }

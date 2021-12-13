@@ -1,9 +1,4 @@
-﻿@font-face {
-    font-family: bs-font;
-    src: url(/fonts/MachineStd.otf);
-}
-
-body {
+﻿body {
     background-image: url('../img/battleship.png');
     background-repeat: no-repeat;
     background-size: cover;
@@ -19,7 +14,9 @@ body {
 #user-name{
     color: red;
     vertical-align: middle;
-}
+    margin-right: 15px;
+    
+}   
 
 #games-list{
     display: inline-block;
@@ -27,7 +24,6 @@ body {
 
 #game-state {
     margin: 10px 10px 10px 0px;
-    border: solid white 1px;
     display: inline-block;
     min-width: 350px;
     padding: 5px;
@@ -35,6 +31,7 @@ body {
     font-family: 'Oswald', sans-serif;
     color: #ffce00;
     text-align: center;
+    border-radius: 5px;
 }
 
 #game-state span{
@@ -88,12 +85,8 @@ body {
     display: block;
 }
 .game-text{
-    color: white;
-    font-family: Arial;
-    font-weight: bold;
-    font-variant: small-caps;
-    text-transform: uppercase;
-    font-size: 85%;
+    /* color: white; */
+    font-family: 'PT Sans', sans-serif;
 }
 
 .sticky-head{
@@ -124,3 +117,76 @@ body {
     border-radius: 5px;
     font-size: 13px;
 }
+
+.slide-table{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 30;
+    max-width: 100%;
+    overflow: auto;
+    }
+
+.up-enter-active, .up-leave-active {
+    overflow: hidden;
+    animation-delay: 1s;
+    animation: up 2s;
+}
+.up-enter, .up-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    overflow: hidden;
+    animation-delay: 1s;
+    animation: down 0.6s;
+}
+
+@keyframes up {
+    from{
+        max-width: 0%;
+        display: table;
+    }
+    to{
+        max-width: 100%;
+        display: table;
+    }
+}
+@keyframes down {
+    from{
+        max-height: 100%;
+    }
+    to{
+        max-height: 0%;
+    }
+}
+.tab-title{
+    position: absolute;
+    margin-left: calc( 50% - 64px );
+}
+.preloader {
+    width: 50px;
+    height: 50px;
+    border: 7px solid #eee;
+    border-top: 7px solid #666;
+    border-radius: 50%;
+    animation-name: girar;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    position: relative;
+    display: inline-block;
+  }
+  @keyframes girar {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .games-container{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 425px;
+  }
+  .game-container{
+    background-color: rgb(62, 68, 74);
+    color: blanchedalmond;
+    min-width: 220px;
+  }

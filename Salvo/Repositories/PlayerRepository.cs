@@ -19,7 +19,11 @@ namespace Salvo.Repositories
 
         public void Save(Player player)
         {
-            Create(player);
+            if (player.Id == 0)
+                Create(player);
+            else
+                Update(player);
+            //save
             SaveChanges();
         }
     }

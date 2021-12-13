@@ -32,7 +32,13 @@ namespace Salvo.Repositories
             return FindAll(source => source
                     .Include(game => game.GamePlayers)
                         .ThenInclude(gameplayer => gameplayer.Player)
-                        .ThenInclude(player => player.Scores))
+                            .ThenInclude(player => player.Scores))
+                    .Include(game => game.GamePlayers)
+                        .ThenInclude(gamePlayer => gamePlayer.Salvos)
+                            .ThenInclude(salvo => salvo.Locations)
+                    .Include(game => game.GamePlayers)
+                        .ThenInclude(gamePlayer => gamePlayer.Ships)
+                            .ThenInclude(ship => ship.Locations)
                     .OrderBy(game => game.CreationDate).ToList();
         }
     }
