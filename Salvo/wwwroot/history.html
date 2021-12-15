@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/salvo.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+	<title>Salvo games!</title>
+</head>
+<body>
+    <div id="app">
+        <!-- Image and text -->
+        <nav class="navbar navbar-light bg-light navbar-expand-md">
+            <a class="navbar-brand" href="/index.html">
+                <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+                Salvo
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                </ul>
+                <span id="user-name" v-if="player != 'Guest'">{{ player }} </span>
+                <form id="login-form" class="form-inline my-2 my-lg-0">
+                    <input v-model:value="email" class="form-control mr-sm-2" type="email" placeholder="Email" aria-label="Email">
+                    <input v-model:value="password" class="form-control mr-sm-2" type="password" placeholder="Contrase&ntilde;a" aria-label="Contraseña">
+                    <button v-on:click="login" id="login-btn" class="btn btn-outline-success my-2 my-sm-0" type="button">Login</button>
+                    <button v-on:click="registerPage" id="signin-btn" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Registro</button>
+                </form>
+                <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
+            </div>
+        </nav>
+        <div class="container mt-3">
+            <div class="row justify-content-center">
+                <div class="col-7 mt-0">
+                    <h2 class="title mt-4 mb-0">Historial de juegos</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="btn-group ml-2 mr-2 mb-1" role="group">
+                        <button v-on:click="back()" id="back-btn" class="btn btn-secondary btn-sm" type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 2 16 16">
+                                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                            </svg>
+                        </button>
+                        <button v-if="player != 'Guest'" v-on:click="renderGlobalTable()" id="history-global-btn" class="btn btn-secondary btn-sm" type="button">Global</button>
+                        <button v-if="player != 'Guest'" v-on:click="renderPlayerTable()" id="history-player-btn" class="btn btn-secondary btn-sm" type="button">Jugador</button>
+                    </div>
+                    <div class="overflow-auto ml-2 mr-2 mb-2 rounded-lg scroll" style="max-height: 515px;">
+                        <table class="table table-striped table-dark table-borderless table-responsive-sm mb-0 game-text">    
+                            <thead class="thead-dark sticky-head">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Jugador 1</th>
+                                    <th>Jugador 2</th>
+                                    <th>Estado</th>
+                                    <th>Fecha de creacion</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="playerTable == 'true'">
+                                <tr  v-for="game in historyGames" v-if="game.player1 == player || game.player2 == player">
+                                    <td>{{ game.gameId }}</td>
+                                    <td>{{ game.player1 }}</td>
+                                    <td>{{ game.player2}}</td>
+                                    <td>{{ game.status}}</td>
+                                    <td>{{ game.creationDate | dateFormat}}</td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="playerTable != 'true'">
+                                <tr  v-for="game in historyGames">
+                                    <td>{{ game.gameId }}</td>
+                                    <td>{{ game.player1 }}</td>
+                                    <td>{{ game.player2}}</td>
+                                    <td>{{ game.status}}</td>
+                                    <td>{{ game.creationDate | dateFormat}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal-->
+        <div class="modal fade " id="infoModal" role="dialog" aria-labelledby="infoModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+                <div class="modal-content text-center" style="border: none">
+                    <!--Header-->
+                    <div class="modal-header justify-content-center" style="background-color: #ff3547;">
+                        <p class="heading m-0" style="color: #fff; font-size: 20px;">{{modal.tittle}}</p>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <i>{{modal.message}}</i>
+                    </div>
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" class="btn btn-danger" style="color: #fff;" data-dismiss="modal">Ok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/es.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/history.js"></script>
+</body>
+</html>

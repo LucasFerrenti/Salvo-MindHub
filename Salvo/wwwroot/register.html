@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/salvo.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+	<title>Salvo games!</title>
+</head>
+<body>
+    <div id="app">
+        <!-- Image and text -->
+        <nav class="navbar navbar-light bg-light navbar-expand-md">
+            <a class="navbar-brand" href="/index.html">
+                <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+                Salvo
+            </a>
+        </nav>
+
+        <div class="container mt-3 mb-3" style="max-width: 400px;">
+            <div class="row justify-content-center">
+                <div>
+                    <h1 class="title mt-4 mb-0" style="font-size: 50px;">Registro</h1>
+                </div>
+            </div>
+            <div class="row-sm justify-content-center">
+                <form class="ml-4 mr-4">
+                    <div class="form-group">
+                        <input id="email-form" @change="checkEmailForm" v-model:value="email" class="form-control mb-2" type="email" placeholder="Email" aria-label="Email">
+                        <div id="email-info" class="invalid-feedback m-0">
+                            {{emailError}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input id="user-form" @change="checkUserForm" v-model:value="user" class="form-control mb-2" type="text" placeholder="Usuario" aria-label="User">
+                        <div id="user-info" class="invalid-feedback m-0">
+                            {{userError}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input id="password-form" @change="checkPasswordForm" @keyup.enter="checkRegisterForm" v-model:value="password" class="form-control mb-2" type="password" placeholder="Contrase&ntilde;a" aria-label="Contrase&ntilde;a">
+                        <div id="password-info" class="invalid-feedback m-0">
+                            {{passwordError}}
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button v-on:click="back" id="cancel-btn" class="btn btn-danger mb-4" type="button">Cancelar</button>  
+                        <button v-on:click="checkRegisterForm" id="signin-btn" class="btn btn-primary mb-4" type="button">Registrar</button>  
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade" id="loadingModal" tabind    ex="-1" role="dialog" aria-labelledby="loading" aria-hidden="true" style="pointer-events: none; border: none;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="background-color: rgba(0, 0, 0, 0); border: none;">
+                    <div class="modal-header text-center row justify-content-center" style="border: none;">
+                        <div class="preloader"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal-->
+        <div class="modal fade " id="infoModal" role="dialog" aria-labelledby="infoModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+                <div class="modal-content text-center" style="border: none">
+                    <!--Header-->
+                    <div class="modal-header justify-content-center" style="background-color: #ff3547;">
+                        <p class="heading m-0" style="color: #fff; font-size: 20px;">{{modal.tittle}}</p>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <i>{{modal.message}}</i>
+                    </div>
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" class="btn btn-danger" style="color: #fff;" data-dismiss="modal">Ok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/es.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/register.js"></script>
+</body>
+</html>

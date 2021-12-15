@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Salvo.Models;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Salvo.Repositories
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected SalvoContex RepositoryContext { get; set; }
-        public RepositoryBase(SalvoContex repositoryContext)
+        protected SalvoContext RepositoryContext { get; set; }
+        public RepositoryBase(SalvoContext repositoryContext)
         {
             this.RepositoryContext = repositoryContext;
         }
@@ -21,7 +22,7 @@ namespace Salvo.Repositories
         }
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
-            return this.RepositoryContext.Set<T>().Where(expression).AsNoTracking();
+            return this.RepositoryContext.Set<T>().Where(expression).AsNoTrackingWithIdentityResolution();
         }
         public void Create(T entity)
         {
@@ -34,6 +35,23 @@ namespace Salvo.Repositories
         public void Delete(T entity)
         {
             this.RepositoryContext.Set<T>().Remove(entity);
+        }
+
+        public IQueryable<T> FindAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        {
+            IQueryable<T> queryable = this.RepositoryContext.Set<T>();
+
+            if (includes != null)
+            {
+                queryable = includes(queryable);
+            }
+
+            return queryable.AsNoTrackingWithIdentityResolution();
+        }
+
+        public void SaveChanges()
+        {
+            this.RepositoryContext.SaveChanges();
         }
     }
 }

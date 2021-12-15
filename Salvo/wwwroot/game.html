@@ -1,0 +1,314 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
+    <link rel="stylesheet" href="css/salvo.css" />
+    <link rel="stylesheet" href="dist/normalize.css" />
+    <link rel="stylesheet" href="dist/gridstack.css" />
+    <link rel="stylesheet" href="dist/gridstack-extra.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <title>Salvo games!</title>
+</head>
+<body>
+    <div id="app">
+        <!-- Image and text -->
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="/index.html">
+                <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+                Salvo
+                <div id="playersList">
+                    <span class="game-text" id="playerOne">{{ player.email }}</span>
+                    <span class="game-text" v-if="opponent.email != null"> vs {{ opponent.email }}</span>
+                </div>
+            </a>
+            <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
+        </nav>
+        <div class="container  mt-2">
+            <div class="row ">
+                <div class="col-6">
+
+                    <h1 class="title">Barcos</h1>
+                    <div class="row justify-content-center">
+                        <div class="shipsStatus w-100">
+                            <div class="row justify-content-center">
+                                <span class="mx-2"><img id="CarrierIcon" src="img/carrierafloat.png"></span>
+                                <span class="mx-2"><img id="BattleShipIcon" src="img/battleshipafloat.png"></span>
+                                <span class="mx-2"><img id="SubmarineIcon" src="img/submarineafloat.png"></span>
+                            </div>
+                            <div class="row justify-content-center">
+                                <span class="mx-2"><img id="DestroyerIcon" src="img/destroyerafloat.png"></span>
+                                <span class="mx-2"><img id="PatroalBoatIcon" src="img/patroalboatafloat.png"></span>
+                            </div>                              
+                        </div>
+                    </div>                    
+                    <div class="row justify-content-center">
+                        <button v-if="gameView.ships && gameView.ships.length < 5" 
+                                class="btn btn-success btn-md my-3" 
+                                v-on:click="placeShips()">
+                                    Posicionar barcos!!
+                        </button>
+                        <div v-else class="mb-5 mt-4"></div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="grid-ships">
+                            <!-- div que usa la librería gridstack grid-stack-10 se indica que son 10 columnas-->
+                            <div id="grid" class="grid-stack grid-stack-10">
+                                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h1 class="title">Salvos</h1>
+                    <div class="row justify-content-center">
+                        <div class="shipsStatus w-100">
+                            <div class="row justify-content-center">
+                                <span class="mx-2"><img id="CarrierIcon" src="img/carrierafloat.png"></span>
+                                <span class="mx-2"><img id="BattleShipIcon" src="img/battleshipafloat.png"></span>
+                                <span class="mx-2"><img id="SubmarineIcon" src="img/submarineafloat.png"></span>
+                            </div>
+                            <div class="row justify-content-center">
+                                <span class="mx-2"><img id="DestroyerIcon" src="img/destroyerafloat.png"></span>
+                                <span class="mx-2"><img id="PatroalBoatIcon" src="img/patroalboatafloat.png"></span>
+                            </div>  
+                        </div>
+                    </div>
+                              
+                    <div class="row justify-content-center">
+
+                        <button v-if="gameView.gameState == 'ENTER_SALVO'" 
+                                class="btn btn-success btn-md my-3" 
+                                v-on:click="placeSalvos()">
+                                    Disparar salvos!!
+                        </button>
+                        <div v-else class="mb-5 mt-4"></div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <table class="salvo-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                    <th>6</th>
+                                    <th>7</th>
+                                    <th>8</th>
+                                    <th>9</th>
+                                    <th>10</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="td-info">A</td>
+                                    <td class="salvo h5 text-warning" id="A1"></td>
+                                    <td class="salvo h5 text-warning" id="A2"></td>
+                                    <td class="salvo h5 text-warning" id="A3"></td>
+                                    <td class="salvo h5 text-warning" id="A4"></td>
+                                    <td class="salvo h5 text-warning" id="A5"></td>
+                                    <td class="salvo h5 text-warning" id="A6"></td>
+                                    <td class="salvo h5 text-warning" id="A7"></td>
+                                    <td class="salvo h5 text-warning" id="A8"></td>
+                                    <td class="salvo h5 text-warning" id="A9"></td>
+                                    <td class="salvo h5 text-warning" id="A10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">B</td>
+                                    <td class="salvo h5 text-warning" id="B1"></td>
+                                    <td class="salvo h5 text-warning" id="B2"></td>
+                                    <td class="salvo h5 text-warning" id="B3"></td>
+                                    <td class="salvo h5 text-warning" id="B4"></td>
+                                    <td class="salvo h5 text-warning" id="B5"></td>
+                                    <td class="salvo h5 text-warning" id="B6"></td>
+                                    <td class="salvo h5 text-warning" id="B7"></td>
+                                    <td class="salvo h5 text-warning" id="B8"></td>
+                                    <td class="salvo h5 text-warning" id="B9"></td>
+                                    <td class="salvo h5 text-warning" id="B10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">C</td>
+                                    <td class="salvo h5 text-warning" id="C1"></td>
+                                    <td class="salvo h5 text-warning" id="C2"></td>
+                                    <td class="salvo h5 text-warning" id="C3"></td>
+                                    <td class="salvo h5 text-warning" id="C4"></td>
+                                    <td class="salvo h5 text-warning" id="C5"></td>
+                                    <td class="salvo h5 text-warning" id="C6"></td>
+                                    <td class="salvo h5 text-warning" id="C7"></td>
+                                    <td class="salvo h5 text-warning" id="C8"></td>
+                                    <td class="salvo h5 text-warning" id="C9"></td>
+                                    <td class="salvo h5 text-warning" id="C10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">D</td>
+                                    <td class="salvo h5 text-warning" id="D1"></td>
+                                    <td class="salvo h5 text-warning" id="D2"></td>
+                                    <td class="salvo h5 text-warning" id="D3"></td>
+                                    <td class="salvo h5 text-warning" id="D4"></td>
+                                    <td class="salvo h5 text-warning" id="D5"></td>
+                                    <td class="salvo h5 text-warning" id="D6"></td>
+                                    <td class="salvo h5 text-warning" id="D7"></td>
+                                    <td class="salvo h5 text-warning" id="D8"></td>
+                                    <td class="salvo h5 text-warning" id="D9"></td>
+                                    <td class="salvo h5 text-warning" id="D10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">E</td>
+                                    <td class="salvo h5 text-warning" id="E1"></td>
+                                    <td class="salvo h5 text-warning" id="E2"></td>
+                                    <td class="salvo h5 text-warning" id="E3"></td>
+                                    <td class="salvo h5 text-warning" id="E4"></td>
+                                    <td class="salvo h5 text-warning" id="E5"></td>
+                                    <td class="salvo h5 text-warning" id="E6"></td>
+                                    <td class="salvo h5 text-warning" id="E7"></td>
+                                    <td class="salvo h5 text-warning" id="E8"></td>
+                                    <td class="salvo h5 text-warning" id="E9"></td>
+                                    <td class="salvo h5 text-warning" id="E10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">F</td>
+                                    <td class="salvo h5 text-warning" id="F1"></td>
+                                    <td class="salvo h5 text-warning" id="F2"></td>
+                                    <td class="salvo h5 text-warning" id="F3"></td>
+                                    <td class="salvo h5 text-warning" id="F4"></td>
+                                    <td class="salvo h5 text-warning" id="F5"></td>
+                                    <td class="salvo h5 text-warning" id="F6"></td>
+                                    <td class="salvo h5 text-warning" id="F7"></td>
+                                    <td class="salvo h5 text-warning" id="F8"></td>
+                                    <td class="salvo h5 text-warning" id="F9"></td>
+                                    <td class="salvo h5 text-warning" id="F10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">G</td>
+                                    <td class="salvo h5 text-warning" id="G1"></td>
+                                    <td class="salvo h5 text-warning" id="G2"></td>
+                                    <td class="salvo h5 text-warning" id="G3"></td>
+                                    <td class="salvo h5 text-warning" id="G4"></td>
+                                    <td class="salvo h5 text-warning" id="G5"></td>
+                                    <td class="salvo h5 text-warning" id="G6"></td>
+                                    <td class="salvo h5 text-warning" id="G7"></td>
+                                    <td class="salvo h5 text-warning" id="G8"></td>
+                                    <td class="salvo h5 text-warning" id="G9"></td>
+                                    <td class="salvo h5 text-warning" id="G10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">H</td>
+                                    <td class="salvo h5 text-warning" id="H1"></td>
+                                    <td class="salvo h5 text-warning" id="H2"></td>
+                                    <td class="salvo h5 text-warning" id="H3"></td>
+                                    <td class="salvo h5 text-warning" id="H4"></td>
+                                    <td class="salvo h5 text-warning" id="H5"></td>
+                                    <td class="salvo h5 text-warning" id="H6"></td>
+                                    <td class="salvo h5 text-warning" id="H7"></td>
+                                    <td class="salvo h5 text-warning" id="H8"></td>
+                                    <td class="salvo h5 text-warning" id="H9"></td>
+                                    <td class="salvo h5 text-warning" id="H10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">I</td>
+                                    <td class="salvo h5 text-warning" id="I1"></td>
+                                    <td class="salvo h5 text-warning" id="I2"></td>
+                                    <td class="salvo h5 text-warning" id="I3"></td>
+                                    <td class="salvo h5 text-warning" id="I4"></td>
+                                    <td class="salvo h5 text-warning" id="I5"></td>
+                                    <td class="salvo h5 text-warning" id="I6"></td>
+                                    <td class="salvo h5 text-warning" id="I7"></td>
+                                    <td class="salvo h5 text-warning" id="I8"></td>
+                                    <td class="salvo h5 text-warning" id="I9"></td>
+                                    <td class="salvo h5 text-warning" id="I10"></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-info">J</td>
+                                    <td class="salvo h5 text-warning" id="J1"></td>
+                                    <td class="salvo h5 text-warning" id="J2"></td>
+                                    <td class="salvo h5 text-warning" id="J3"></td>
+                                    <td class="salvo h5 text-warning" id="J4"></td>
+                                    <td class="salvo h5 text-warning" id="J5"></td>
+                                    <td class="salvo h5 text-warning" id="J6"></td>
+                                    <td class="salvo h5 text-warning" id="J7"></td>
+                                    <td class="salvo h5 text-warning" id="J8"></td>
+                                    <td class="salvo h5 text-warning" id="J9"></td>
+                                    <td class="salvo h5 text-warning" id="J10"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col d-flex justify-content-center w-75 my-2">
+                    <div id="game-state">
+                        <span>{{gameState}}</span>
+                        <div v-if="gameView.gameState == 'WAIT'" class="img-state img-state-wait"></div>
+                        <div v-else-if="gameView.gameState == 'PLACE_SHIPS'" class="img-state img-state-ship"></div>
+                        <div v-else-if="gameView.gameState == 'ENTER_SALVO'" class="img-state img-state-fire"></div>
+                        <div v-else-if="gameView.gameState == 'WIN'" class="img-state img-state-win"></div>
+                        <div v-else-if="gameView.gameState == 'LOSS'" class="img-state img-state-loss"></div>
+                        <div v-else-if="gameView.gameState == 'TIE'" class="img-state img-state-tie"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col mx-3">
+                            <table class="table table-sm table-dark table-striped table-borderless rounded-lg ">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Turno</th>
+                                        <th class="text-center">Daños</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="hit in gameView.hits">
+                                        <td>{{hit.turn}}</td>
+                                        <td><span v-for="shipHit in hit.hits">{{ shipHit.hits.length > 0 ? shipHit.type +' (' + shipHit.hits.length  + ') ' : '' }}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col mx-3">
+                            <table class="table table-sm table-dark table-striped table-borderless rounded-lg">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Turno</th>
+                                        <th class="text-center">Daños</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="hit in gameView.hitsOpponent">
+                                        <td>{{hit.turn}}</td>
+                                        <td><span v-for="shipHit in hit.hits">{{ shipHit.hits.length > 0 ? shipHit.type +' (' + shipHit.hits.length  + ') ' : '' }}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/es.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    <script src="dist/jquery-ui.min.js"></script>
+    <script src="dist/gridstack.js"></script>
+    <script src="dist/gridstack.jQueryUI.js"></script>
+    <script src="dist/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/gameView.js"></script>
+</body>
+</html>
