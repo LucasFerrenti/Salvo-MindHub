@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>annotations</Nullable>
+    <UserSecretsId>5bc9cce3-e12a-41d6-a51a-04bd21829b43</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
