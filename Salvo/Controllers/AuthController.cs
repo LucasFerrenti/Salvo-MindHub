@@ -8,7 +8,7 @@ using Salvo.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-
+using Salvo.Utilities;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Salvo.Controllers
@@ -36,7 +36,7 @@ namespace Salvo.Controllers
                 if (user == null)
                     return StatusCode(401, "Unauthorized: Email invalido");
                 // check password
-                if (!String.Equals(user.Password, player.Password))
+                if (!String.Equals(user.Password, Encrypt.GetSHA256(player.Password)))
                     return StatusCode(401, "Unauthorized: Contraceña incorrecta");
                 // check is active
                 if (!user.IsActive)

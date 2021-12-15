@@ -8,6 +8,7 @@ using Salvo.Repositories;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
 using System.Net;
+using Salvo.Utilities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -50,14 +51,13 @@ namespace Salvo.Controllers
                 Player newPlayer = new Player
                 {
                     Email = player.Email,
-                    Password = player.Password,
+                    Password = Encrypt.GetSHA256(player.Password),
                     Name = player.User,
                     IsActive = false,
                     ActivationCode = code
                 };
                 //Save player in database
                 _repository.Save(newPlayer);
-
 
                 return StatusCode(201, "Registro Completado");
             }
