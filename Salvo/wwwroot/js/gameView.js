@@ -355,6 +355,12 @@ function getGameState(gameState) {
         case 'PLACE_SHIPS':
             state = 'Capitán, posicione los barcos'
             break;
+        case 'WAITING_OPPONENT':
+            state = 'Capitán, no hay oponente.'
+            break;
+        case 'WAITING_OPPONENT_SHIPS':
+            state = 'Esperando que el oponente posicione los barcos.'
+            break;
         case 'WAIT':
             state = 'Capitán, debe esperar la recarga de las armas'
             break;

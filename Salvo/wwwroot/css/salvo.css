@@ -72,12 +72,19 @@
     background-image: url(../img/tie.gif);
 }
 
+.img-state-wait-opponent{
+    background-image: url(../img/wait-opponent.gif);
+}
+
+.img-state-wait-opponent-ships {
+    background-image: url(../img/wait-opponent-ships.gif);
+}
+
 .title {
     text-align: center;
     font-family: bs-font;
     color: rgba(226, 226, 226);
     text-shadow: 1px 1px 3px rgb(36, 36, 36);
-    
 }
 #logo{
     height: 100;

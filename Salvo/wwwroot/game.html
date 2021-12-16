@@ -250,6 +250,8 @@
                         <span>{{gameState}}</span>
                         <div v-if="gameView.gameState == 'WAIT'" class="img-state img-state-wait"></div>
                         <div v-else-if="gameView.gameState == 'PLACE_SHIPS'" class="img-state img-state-ship"></div>
+                        <div v-else-if="gameView.gameState == 'WAITING_OPPONENT'" class="img-state img-state-wait-opponent"></div>
+                        <div v-else-if="gameView.gameState == 'WAITING_OPPONENT_SHIPS'" class="img-state img-state-wait-opponent-ships"></div>
                         <div v-else-if="gameView.gameState == 'ENTER_SALVO'" class="img-state img-state-fire"></div>
                         <div v-else-if="gameView.gameState == 'WIN'" class="img-state img-state-win"></div>
                         <div v-else-if="gameView.gameState == 'LOSS'" class="img-state img-state-loss"></div>

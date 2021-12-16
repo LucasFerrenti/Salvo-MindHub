@@ -10,6 +10,8 @@ namespace Salvo.Models
         PLACE_SHIPS,
         WAIT,
         ENTER_SALVO,
+        WAITING_OPPONENT, //Esperando a un oponente
+        WAITING_OPPONENT_SHIPS, //Esperando barcos del oponente
         WIN,
         LOSS,
         TIE
