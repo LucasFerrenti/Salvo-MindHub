@@ -33,7 +33,7 @@
         <div class="container  mt-3 mb-3">
             <div class="row justify-content-center">
                 <div class="col-sm- ml-5 mr-5">
-                    <h1 class="title">Barcos</h1>
+                    <h1 class="title mt-2 mb-1">Barcos</h1>
                     <div class="row justify-content-center">
                         <div class="shipsStatus w-100 rounded-lg" style="background-color: rgb(60, 157, 214);">
                             <div class="row justify-content-center">
@@ -46,10 +46,10 @@
                         </div>
                     </div>                    
                     <div class="row justify-content-center">
-                        <h2 v-if="gameView.ships && gameView.ships.length < 5" class="title my-2" style="min-height: 32px; max-height: 32px;">
+                        <h3 v-if="gameView.ships && gameView.ships.length < 5" class="title my-2" style="min-height: 24px; max-height: 24px;">
                             Posicione sus barcos
-                        </h2>
-                        <div v-else class="mb-4  mt-4"></div>
+                        </h3>
+                        <div v-else class="mb-3  mt-4"></div>
                     </div>
                     <div class="row-sm- justify-content-center">
                         <div v-if="gameView.ships && gameView.ships.length < 5" class="btn-place text-center" @click="placeShips()">
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="col-sm- ml-5 mr-5">
-                    <h1 class="title">Salvos</h1>
+                    <h1 class="title mt-2 mb-1">Salvos</h1>
                     <div class="row-sm- justify-content-center">
                         <div class="shipsStatus w-100 rounded-lg" style="background-color: rgb(60, 157, 214);">
                             <div class="row justify-content-center">
@@ -79,10 +79,10 @@
                               
                     <div class="row justify-content-center">
 
-                        <h2 v-if="gameView.gameState == 'ENTER_SALVO'" class="title my-2">
+                        <h3 v-if="gameView.gameState == 'ENTER_SALVO'" class="title my-2" style="min-height: 24px; max-height: 24px;">
                             Dispare los salvos
-                        </h2>
-                        <div v-else class="mb-4 mt-4"></div>
+                        </h3>
+                        <div v-else class="mb-3 mt-4"></div>
                     </div>
                     <div class="row-sm- justify-content-center">
                         <img v-if="gameView.gameState == 'ENTER_SALVO'" 
@@ -246,7 +246,7 @@
             <div class="row justify-content-center">
                 <div class="col-sm- d-flex justify-content-center w-75 my-2">
                     <div id="game-state">
-                        <span>{{gameState}}</span>
+                        <span style="font-size: 20px;">{{gameState}}</span>
                         <div v-if="gameView.gameState == 'WAIT'" class="img-state img-state-wait"></div>
                         <div v-else-if="gameView.gameState == 'PLACE_SHIPS'" class="img-state img-state-ship"></div>
                         <div v-else-if="gameView.gameState == 'ENTER_SALVO'" class="img-state img-state-fire"></div>

@@ -197,13 +197,13 @@
         max-height: 37px;
         min-width: 37px;
         min-height: 37px;
-        background-color: crimson;
+        background-color: #bb2f3d;
         border-radius: 20px;
         font-family: 'PT Sans', sans-serif;
         transition: background-color .3s;
   }
   .btn-shoot:hover{
-    background-color: rgb(255, 255, 255);
+    background-color: #ff374b;
   }
   .btn-place{
     z-index: 100;
@@ -219,6 +219,15 @@
     color: wheat;
 }
 .btn-place:hover{
-    background-color: #25bb75
-    ;
+    background-color: #25bb75;
+    
+}
+.salvo.h5:not(.shoot ):not(.shooted){
+    border-radius: 20px;
+    opacity: 30%;
+    transition: background-color 0.3s;
+}
+.salvo.h5:not(.shoot ):not(.shooted):hover{
+    background-color: #dc3545;
+    
 }

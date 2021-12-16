@@ -47,7 +47,10 @@
                     }
                 })
                 .catch(error => {
-                    alert(error);
+                    console.log(error.data);
+                    this.modal.tittle = "Error " + error.status;
+                    this.modal.message = error.data;
+                    this.showModal(true);
                 });
         },
         showModal: function (show) {
@@ -77,7 +80,10 @@
                     }
                 })
                 .catch(error => {
-                    alert("Ocurrió un error al cerrar sesión");
+                    console.log(error.response.data);
+                    this.modal.tittle = "Error " + error.reponse.status;
+                    this.modal.message = error.response.data;
+                    this.showModal(true);
                 });
         },
         login: function (event) {

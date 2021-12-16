@@ -30,7 +30,10 @@ var app = new Vue({
                 this.getGameData();
             })
             .catch(error => {
-                alert("error al obtener los datos");
+                console.log(error.data);
+                this.modal.tittle = "Error " + error.status;
+                this.modal.message = error.data;
+                this.showModal(true);
             })
     },
     methods: {
@@ -70,7 +73,10 @@ var app = new Vue({
                     }
                 })
                 .catch(error => {
-                    alert("Ocurrió un error al cerrar sesión");
+                    console.log(error.response.data);
+                    this.modal.tittle = "Error " + error.response.status;
+                    this.modal.message = error.response.data;
+                    this.showModal(true);
                 });
         },
         placeShips: function () {
@@ -112,7 +118,10 @@ var app = new Vue({
                     window.location.reload();
                 })
                 .catch(error => {
-                    alert("error: " + error.response.data);
+                    console.log(error.response.data);
+                    this.modal.tittle = "Error " + error.response.status;
+                    this.modal.message = error.response.data;
+                    this.showModal(true);
                 });
         },
         placeSalvos: function () {

@@ -117,7 +117,10 @@
                     }
                 })
                 .catch(error => {
-                    alert("Ocurrió un error al cerrar sesión");
+                    console.log(error.response.data);
+                    this.modal.tittle = "Error " + error.response.status;
+                    this.modal.message = error.response.data;
+                    this.showModal(true);
                 });
         },
         login: function (event) {
