@@ -14,7 +14,7 @@
 .CarrierVertical {
     background-image: url('../img/carrierver.png');
     background-size: 100% 100%;
-    width: 42px !important;
+    width: 37px !important;
 }
 
 .PatroalBoatHorizontal {
@@ -25,7 +25,7 @@
 .PatroalBoatVertical {
     background-image: url('../img/patrolboatver.png');
     background-size: 100% 100%;
-    width: 42px !important;
+    width: 37px !important;
 }
 
 .SubmarineHorizontal {
@@ -36,7 +36,7 @@
 .SubmarineVertical {
     background-image: url('../img/submarinever.png');
     background-size: 100% 100%;
-    width: 42px !important;
+    width: 37px !important;
 }
 
 .DestroyerHorizontal {
@@ -47,7 +47,7 @@
 .DestroyerVertical {
     background-image: url('../img/destroyerver.png');
     background-size: 100% 100%;
-    width: 42px !important;
+    width: 37px !important;
 }
 
 .BattleShipHorizontal {
@@ -58,38 +58,41 @@
 .BattleShipVertical {
     background-image: url('../img/battleshipver.png');
     background-size: 100% 100%;
-    width: 42px !important;
+    width: 37px !important;
 }
 
 .grid-ships {
-    height: 450px;
-    width: 450px;
-    background-image: url('../img/grid-bkg.png');
+    min-width: 407px;
+    min-height: 407px;
+    background-image: url(../img/grid-bkg.png);
     background-size: contain;
-    padding-left: 42px;
-    padding-top: 42px;
+    padding-left: 37px;
+    padding-top: 37px;
     position: relative;
 }
 
 .salvo-table{
-    background-image: url('../img/backships.gif');
+    background-image: url('../img/grid-bkg.png');
     background-size: contain;
+    min-width: 407px;
+    min-height: 407px;
+    font-family: 'PT Sans', sans-serif;
 }
 
 .salvo-table th{
-    background-color: rgb(213, 213, 213);
+    /* background-color: rgb(213, 213, 213); */
     text-align: center;
 }
 
 .salvo-table .td-info {
-    background-color: rgb(213, 213, 213);
+    /* background-color: rgb(213, 213, 213); */
     text-align: center;
 }
 
 .salvo-table th, .salvo-table td {
-    border: solid black 1px;
-    width: 40px;
-    height: 41px;
+    /* border: solid black 1px; */
+    width: 37px;
+    height: 37px;
     text-align: center;
 }
 
@@ -100,8 +103,8 @@
 
 .hitSelf {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 37px;
+    height: 37px;
     background-image: url('../img/hit3.gif');
     background-size: contain;
 }
@@ -130,5 +133,5 @@
 
 .shipsStatus{
     background-color: #3b7ad3;
-    max-width: 450px;
+    max-width: 407px;
 }

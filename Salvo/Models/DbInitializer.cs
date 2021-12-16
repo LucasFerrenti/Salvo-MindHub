@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Salvo.Models;
-
+using Salvo.Utilities;
 namespace Salvo.Models
 {
     public static class DbInitializer
@@ -17,27 +17,43 @@ namespace Salvo.Models
                 {
                     new Player
                     {
-                        Name = "Jack Bauer",
-                        Email = "j.bauer@ctu.gov",
-                        Password = "24",
+                        Name = "Text0",
+                        Email = "test0@test.com",
+                        Password = Encrypt.GetSHA256("test0"),
+                        IsActive = true,
+                        ActivationCode = ""
                     },
                     new Player
                     {
-                        Name = "Chloe O'Brian",
-                        Email = "c.obrian@ctu.gov",
-                        Password = "42",
+                        Name = "Text1",
+                        Email = "test1@test.com",
+                        Password = Encrypt.GetSHA256("test1"),
+                        IsActive = true,
+                        ActivationCode = ""
                     },
                     new Player
                     {
-                        Name = "Kim Bauer",
-                        Email = "kim_bauer@gmail.com",
-                        Password = "kb",
+                        Name = "Text2",
+                        Email = "test2@test.com",
+                        Password = Encrypt.GetSHA256("test2"),
+                        IsActive = true,
+                        ActivationCode = ""
                     },
                     new Player
                     {
-                        Name = "Tony Almeida",
-                        Email = "t.almeida@ctu.gov",
-                        Password = "mole",
+                        Name = "Text3",
+                        Email = "test3@test.com",
+                        Password = Encrypt.GetSHA256("test3"),
+                        IsActive = true,
+                        ActivationCode = ""
+                    },
+                    new Player
+                    {
+                        Name = "Text4",
+                        Email = "test4@test.com",
+                        Password = Encrypt.GetSHA256("test4"),
+                        IsActive = true,
+                        ActivationCode = ""
                     },
                 };
                 //Add Contex
