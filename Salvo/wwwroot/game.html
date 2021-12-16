@@ -23,93 +23,92 @@
             <a class="navbar-brand" href="/index.html">
                 <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
                 Salvo
-                <div id="playersList">
-                    <span class="game-text" id="playerOne">{{ player.email }}</span>
-                    <span class="game-text" v-if="opponent.email != null"> vs {{ opponent.email }}</span>
-                </div>
             </a>
+            <div id="playersList">
+                <span class="game-text" id="playerOne">{{ player.email }}</span>
+                <span class="game-text" v-if="opponent.email != null"> vs {{ opponent.email }}</span>
+            </div>
             <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
         </nav>
-        <div class="container  mt-2">
-            <div class="row ">
-                <div class="col-6">
-
+        <div class="container  mt-3 mb-3">
+            <div class="row justify-content-center">
+                <div class="col-sm- ml-5 mr-5">
                     <h1 class="title">Barcos</h1>
                     <div class="row justify-content-center">
-                        <div class="shipsStatus w-100">
+                        <div class="shipsStatus w-100 rounded-lg" style="background-color: rgb(60, 157, 214);">
                             <div class="row justify-content-center">
-                                <span class="mx-2"><img id="CarrierIcon" src="img/carrierafloat.png"></span>
-                                <span class="mx-2"><img id="BattleShipIcon" src="img/battleshipafloat.png"></span>
-                                <span class="mx-2"><img id="SubmarineIcon" src="img/submarineafloat.png"></span>
-                            </div>
-                            <div class="row justify-content-center">
-                                <span class="mx-2"><img id="DestroyerIcon" src="img/destroyerafloat.png"></span>
-                                <span class="mx-2"><img id="PatroalBoatIcon" src="img/patroalboatafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="CarrierIcon" src="img/carrierafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="BattleShipIcon" src="img/battleshipafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="SubmarineIcon" src="img/submarineafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="DestroyerIcon" src="img/destroyerafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="PatroalBoatIcon" src="img/patroalboatafloat.png"></span>
                             </div>                              
                         </div>
                     </div>                    
                     <div class="row justify-content-center">
-                        <button v-if="gameView.ships && gameView.ships.length < 5" 
-                                class="btn btn-success btn-md my-3" 
-                                v-on:click="placeShips()">
-                                    Posicionar barcos!!
-                        </button>
-                        <div v-else class="mb-5 mt-4"></div>
+                        <h2 v-if="gameView.ships && gameView.ships.length < 5" class="title my-2" style="min-height: 32px; max-height: 32px;">
+                            Posicione sus barcos
+                        </h2>
+                        <div v-else class="mb-4  mt-4"></div>
                     </div>
-                    <div class="row justify-content-center">
+                    <div class="row-sm- justify-content-center">
+                        <div v-if="gameView.ships && gameView.ships.length < 5" class="btn-place text-center" @click="placeShips()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-geo-alt-fill mt-2 title" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                            </svg>
+                        </div>
+                        <!-- div que usa la librería gridstack grid-stack-10 se indica que son 10 columnas-->
                         <div class="grid-ships">
-                            <!-- div que usa la librería gridstack grid-stack-10 se indica que son 10 columnas-->
-                            <div id="grid" class="grid-stack grid-stack-10">
-                                    
-                            </div>
+                            <div id="grid" class="grid-stack grid-stack-10"></div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-sm- ml-5 mr-5">
                     <h1 class="title">Salvos</h1>
-                    <div class="row justify-content-center">
-                        <div class="shipsStatus w-100">
+                    <div class="row-sm- justify-content-center">
+                        <div class="shipsStatus w-100 rounded-lg" style="background-color: rgb(60, 157, 214);">
                             <div class="row justify-content-center">
-                                <span class="mx-2"><img id="CarrierIcon" src="img/carrierafloat.png"></span>
-                                <span class="mx-2"><img id="BattleShipIcon" src="img/battleshipafloat.png"></span>
-                                <span class="mx-2"><img id="SubmarineIcon" src="img/submarineafloat.png"></span>
-                            </div>
-                            <div class="row justify-content-center">
-                                <span class="mx-2"><img id="DestroyerIcon" src="img/destroyerafloat.png"></span>
-                                <span class="mx-2"><img id="PatroalBoatIcon" src="img/patroalboatafloat.png"></span>
-                            </div>  
+                                <span class="mx-2 m-1"><img id="OpponentCarrierIcon" src="img/carrierafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="OpponentBattleShipIcon" src="img/battleshipafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="OpponentSubmarineIcon" src="img/submarineafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="OpponentDestroyerIcon" src="img/destroyerafloat.png"></span>
+                                <span class="mx-2 m-1"><img id="OpponentPatroalBoatIcon" src="img/patroalboatafloat.png"></span>
+                            </div>   
                         </div>
                     </div>
                               
                     <div class="row justify-content-center">
 
-                        <button v-if="gameView.gameState == 'ENTER_SALVO'" 
-                                class="btn btn-success btn-md my-3" 
-                                v-on:click="placeSalvos()">
-                                    Disparar salvos!!
-                        </button>
-                        <div v-else class="mb-5 mt-4"></div>
+                        <h2 v-if="gameView.gameState == 'ENTER_SALVO'" class="title my-2">
+                            Dispare los salvos
+                        </h2>
+                        <div v-else class="mb-4 mt-4"></div>
                     </div>
-                    <div class="row justify-content-center">
+                    <div class="row-sm- justify-content-center">
+                        <img v-if="gameView.gameState == 'ENTER_SALVO'" 
+                                class="btn-shoot" 
+                                v-on:click="placeSalvos()"
+                                src="/img/aim.png" alt="">
+                        </img>
                         <table class="salvo-table">
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>1</th>
-                                    <th>2</th>
-                                    <th>3</th>
-                                    <th>4</th>
-                                    <th>5</th>
-                                    <th>6</th>
-                                    <th>7</th>
-                                    <th>8</th>
-                                    <th>9</th>
-                                    <th>10</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="td-info">A</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="A1"></td>
                                     <td class="salvo h5 text-warning" id="A2"></td>
                                     <td class="salvo h5 text-warning" id="A3"></td>
@@ -122,7 +121,7 @@
                                     <td class="salvo h5 text-warning" id="A10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">B</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="B1"></td>
                                     <td class="salvo h5 text-warning" id="B2"></td>
                                     <td class="salvo h5 text-warning" id="B3"></td>
@@ -135,7 +134,7 @@
                                     <td class="salvo h5 text-warning" id="B10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">C</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="C1"></td>
                                     <td class="salvo h5 text-warning" id="C2"></td>
                                     <td class="salvo h5 text-warning" id="C3"></td>
@@ -148,7 +147,7 @@
                                     <td class="salvo h5 text-warning" id="C10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">D</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="D1"></td>
                                     <td class="salvo h5 text-warning" id="D2"></td>
                                     <td class="salvo h5 text-warning" id="D3"></td>
@@ -161,7 +160,7 @@
                                     <td class="salvo h5 text-warning" id="D10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">E</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="E1"></td>
                                     <td class="salvo h5 text-warning" id="E2"></td>
                                     <td class="salvo h5 text-warning" id="E3"></td>
@@ -174,7 +173,7 @@
                                     <td class="salvo h5 text-warning" id="E10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">F</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="F1"></td>
                                     <td class="salvo h5 text-warning" id="F2"></td>
                                     <td class="salvo h5 text-warning" id="F3"></td>
@@ -187,7 +186,7 @@
                                     <td class="salvo h5 text-warning" id="F10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">G</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="G1"></td>
                                     <td class="salvo h5 text-warning" id="G2"></td>
                                     <td class="salvo h5 text-warning" id="G3"></td>
@@ -200,7 +199,7 @@
                                     <td class="salvo h5 text-warning" id="G10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">H</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="H1"></td>
                                     <td class="salvo h5 text-warning" id="H2"></td>
                                     <td class="salvo h5 text-warning" id="H3"></td>
@@ -213,7 +212,7 @@
                                     <td class="salvo h5 text-warning" id="H10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">I</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="I1"></td>
                                     <td class="salvo h5 text-warning" id="I2"></td>
                                     <td class="salvo h5 text-warning" id="I3"></td>
@@ -226,7 +225,7 @@
                                     <td class="salvo h5 text-warning" id="I10"></td>
                                 </tr>
                                 <tr>
-                                    <td class="td-info">J</td>
+                                    <td class="td-info"></td>
                                     <td class="salvo h5 text-warning" id="J1"></td>
                                     <td class="salvo h5 text-warning" id="J2"></td>
                                     <td class="salvo h5 text-warning" id="J3"></td>
@@ -244,8 +243,8 @@
                     
                 </div>
             </div>
-            <div class="row">
-                <div class="col d-flex justify-content-center w-75 my-2">
+            <div class="row justify-content-center">
+                <div class="col-sm- d-flex justify-content-center w-75 my-2">
                     <div id="game-state">
                         <span>{{gameState}}</span>
                         <div v-if="gameView.gameState == 'WAIT'" class="img-state img-state-wait"></div>
@@ -257,8 +256,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
+            <div class="row justify-content-center">
+                <div class="col-sm-">
                     <div class="row">
                         <div class="col mx-3">
                             <table class="table table-sm table-dark table-striped table-borderless rounded-lg ">
@@ -292,6 +291,24 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade " id="infoModal" role="dialog" aria-labelledby="infoModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+                <div class="modal-content text-center" style="border: none">
+                    <!--Header-->
+                    <div class="modal-header justify-content-center" style="background-color: #ff3547;">
+                        <p class="heading m-0" style="color: #fff; font-size: 20px;">{{modal.tittle}}</p>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <i>{{modal.message}}</i>
+                    </div>
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" class="btn btn-danger" style="color: #fff;" data-dismiss="modal">Ok</a>
                     </div>
                 </div>
             </div>
