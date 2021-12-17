@@ -87,7 +87,6 @@ var app = new Vue({
             window.location.href = '/game.html?gp=' + gpId;
         },
         getGames: async function () {
-            console.log("hola");
             this.showLogin(false);
             await axios.get('/api/games')
                 .then(response => {
