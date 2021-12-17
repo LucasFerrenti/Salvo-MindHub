@@ -36,6 +36,7 @@ namespace Salvo.Controllers
                 var games = _gameRepository.GetAllGamesWithPlayers().Select(g => new GameDTO
                     {
                         Id = g.Id,
+                        //CreationDate = ZoneTime.Change(g.CreationDate, "Argentina Standard Time"),
                         CreationDate = g.CreationDate,
                         GamePlayers = g.GamePlayers.Select(gp => new GamePlayerDTO
                         {
@@ -77,7 +78,7 @@ namespace Salvo.Controllers
                 var email = userClaim == null ? "Guest" : userClaim.Value;
 
                 var player = _playerRepository.FindByEmail(email);
-                var timeNow = DateTime.Now;
+                var timeNow = DateTime.UtcNow;
 
                 GamePlayer gp = new GamePlayer
                 {
@@ -121,7 +122,7 @@ namespace Salvo.Controllers
                 {
                     GameID = game.Id,
                     PlayerID = player.Id,
-                    JoinDate = DateTime.Now
+                    JoinDate = DateTime.UtcNow
                 };
                 //save game player in db
                 _gpRepository.Save(gamePlayer);

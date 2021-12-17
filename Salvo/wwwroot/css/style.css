@@ -1,5 +1,5 @@
 .grid-stack-item-content {
-    opacity: 0.9;
+    opacity: 1;
     background-repeat: no-repeat;
     cursor: -webkit-grab;
     cursor: -moz-grab;
@@ -20,6 +20,7 @@
 .PatroalBoatHorizontal {
     background-image: url('../img/patrolboathor.png');
     background-size: contain;
+    min-width: 72px;
 }
 
 .PatroalBoatVertical {
@@ -29,6 +30,7 @@
 }
 
 .SubmarineHorizontal {
+    min-width: 111px;
     background-image: url('../img/submarinehor.png');
     background-size: contain;
 }
@@ -40,6 +42,7 @@
 }
 
 .DestroyerHorizontal {
+    min-width: 111px;
     background-image: url('../img/destroyerhor.png');
     background-size: contain;
 }
@@ -51,6 +54,7 @@
 }
 
 .BattleShipHorizontal {
+    min-width: 148px;
     background-image: url('../img/battleshiphor.png');
     background-size: contain;
 }
@@ -62,8 +66,8 @@
 }
 
 .grid-ships {
-    min-width: 407px;
-    min-height: 407px;
+    width: 407px!important;
+    height: 407px!important;
     background-image: url(../img/grid-bkg.png);
     background-size: contain;
     padding-left: 37px;
@@ -74,8 +78,8 @@
 .salvo-table{
     background-image: url('../img/grid-bkg.png');
     background-size: contain;
-    min-width: 407px;
-    min-height: 407px;
+    width: 407px!important;
+    height: 407px!important;
     font-family: 'PT Sans', sans-serif;
 }
 
@@ -134,4 +138,43 @@
 .shipsStatus{
     background-color: #3b7ad3;
     max-width: 407px;
+}
+
+.btn-shoot{
+    position: absolute;
+    max-width: 37px;
+    max-height: 37px;
+    min-width: 37px;
+    min-height: 37px;
+    background-color: #bb2f3d;
+    border-radius: 20px;
+    font-family: 'PT Sans', sans-serif;
+    transition: background-color .3s;
+}
+.btn-shoot:hover{
+    background-color: #ff374b;
+}
+.btn-place{
+    z-index: 100;
+    position: absolute;
+    max-width: 37px;
+    max-height: 37px;
+    min-width: 37px;
+    min-height: 37px;
+    background-color: #1d975e;
+    border-radius: 20px;
+    font-family: 'PT Sans', sans-serif;
+    transition: background-color .3s;
+    color: wheat;
+}
+.btn-place:hover{
+    background-color: #25bb75;
+}
+.salvo.h5:not(.shoot ):not(.shooted){
+    border-radius: 20px;
+    opacity: 30%;
+    transition: background-color 0.3s;
+}
+.salvo.h5:not(.shoot ):not(.shooted):hover{
+    background-color: #dc3545;
 }

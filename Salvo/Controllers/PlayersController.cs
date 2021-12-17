@@ -8,7 +8,7 @@ using Salvo.Repositories;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
 using System.Net;
-using Salvo.Utilities;
+using Salvo.Utilities.Encrypt;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -109,7 +109,7 @@ namespace Salvo.Controllers
                 {
                     player.ActivationCode = "";
                     _repository.Save(player);
-                    return StatusCode(403, "Codigo de activacion invalido, genere uno nuevo");
+                    return StatusCode(403, "Codigo de activacion invalido, inicie sesion para generar uno nuevo");
                 }
                 //active and save player
                 player.ActivationCode = "";
@@ -137,6 +137,8 @@ namespace Salvo.Controllers
                     return StatusCode(403, "El usuario se encuentra activado");
                 string code = Guid.NewGuid().ToString();
                 SendEmailConfirmation(email, code);
+                player.ActivationCode = code;
+                _repository.Save(player);
                 return Ok("Email reenviado");
             }
             catch (Exception e)

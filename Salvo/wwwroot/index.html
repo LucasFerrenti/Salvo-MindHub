@@ -106,8 +106,8 @@
             </div>
         </div>
         <transition name="up">
-            <div v-if="show" class="slide-table rounded-left ml-2">
-                <table style="position: sticky; left: 0px;" class="table table-striped table-dark mb-0 game-text table-borderless">
+            <div v-if="show" class="slide-table rounded-left ml-2 scroll">
+                <table style="position: sticky; left: 0px; top: 0px;" class="table table-striped table-dark mb-0 game-text table-borderless">
                     <thead class="thead-dark">
                         <tr>
                             <th colspan="5" class="text-left" style="background-color: rgb(52, 58, 64);">
@@ -133,7 +133,6 @@
                     </thead>
                     <tbody>
                         <tr v-for="score in scores">
-                            
                             <td>{{ score.email }}</td>
                             <td>{{ score.total }}</td>
                             <td>{{ score.win }}</td>
@@ -152,6 +151,16 @@
                 Tabla de l&iacute;deres
             </button>
         </div>
+        <!--loading Modal-->
+        <div class="modal fade" id="loadingModal" tabind    ex="-1" role="dialog" aria-labelledby="loading" aria-hidden="true" style="pointer-events: none; border: none;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="background-color: rgba(0, 0, 0, 0); border: none;">
+                    <div class="modal-header text-center row justify-content-center" style="border: none;">
+                        <div class="preloader"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!--Modal-->
         <div class="modal fade " id="infoModal" role="dialog" aria-labelledby="infoModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
@@ -163,6 +172,7 @@
                     <!--Body-->
                     <div class="modal-body">
                         <i>{{modal.message}}</i>
+                        <div v-html="injectHTML"></div>
                     </div>
                     <!--Footer-->
                     <div class="modal-footer justify-content-center">

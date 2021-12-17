@@ -182,7 +182,7 @@ var app = new Vue({
                 email: this.email, password: this.password, user: this.user
             })
                 .then(result =>{
-                    this.back()
+                    window.location.href = '/index.html?register=successed'
                 })
                 .catch(error => {
                     console.log("error, código de estatus: " + error.response.status);

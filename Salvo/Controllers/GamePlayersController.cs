@@ -227,7 +227,7 @@ namespace Salvo.Controllers
                 Point = point,
                 PlayerId = gp.PlayerID,
                 GameId = gp.GameID,
-                FinishDate = DateTime.Now
+                FinishDate = DateTime.UtcNow
             };
             _scoreRepository.Save(score);
         }

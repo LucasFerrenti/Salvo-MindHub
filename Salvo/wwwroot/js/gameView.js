@@ -16,9 +16,16 @@ var app = new Vue({
         },
     },
     mounted() {
+        $("#logout-btn").hide();
         axios.get('/api/gamePlayers/' + gpId)
             .then(response => {
                 this.gameView = response.data;
+                if(response.data[0] == "<"){
+                    this.modal.tittle = "Sesion caducada";
+                    this.modal.message = "Inicie sesion nuevamente para continuar"
+                    this.showModal(true)
+                    return
+                }
                 var static = this.gameView.ships && this.gameView.ships.length > 0;
                 getPlayers(this.gameView, gpId);
                 initializeGrid(this.gameView, static);
@@ -30,10 +37,16 @@ var app = new Vue({
                 this.getGameData();
             })
             .catch(error => {
-                console.log(error.data);
-                this.modal.tittle = "Error " + error.status;
-                this.modal.message = error.data;
-                this.showModal(true);
+                if (error.status == undefined){
+                    this.modal.tittle = "Error de autorizacion";
+                    this.modal.message = "Permisos insuficientes";
+                    this.showModal(true);
+                }
+                else{
+                    this.modal.tittle = "Error " + error.status;
+                    this.modal.message = error.data;
+                    this.showModal(true);
+                }
             })
     },
     methods: {
@@ -182,7 +195,7 @@ function initializeGrid(gameview, static) {
         //separacion entre elementos (les llaman widgets)
         verticalMargin: 0,
         //altura de las celdas
-        cellHeight: 36,
+        cellHeight: 37,
         //desabilitando el resize de los widgets
         disableResize: true,
         //widgets flotantes

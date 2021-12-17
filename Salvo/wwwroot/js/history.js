@@ -14,6 +14,7 @@
         player: ""
     },
     mounted() {
+        $("#logout-btn").hide();
         this.getGames();
     },
     methods: {
@@ -142,9 +143,11 @@
         }
     },
     filters: {
-        dateFormat(date) {
+        dateFormat(stringDate) {
+            let date = new Date(stringDate)
+            let utcDiff = date.getTimezoneOffset() / 60;
+            let localDate = new Date(date.setHours(date.getHours() - utcDiff)).toJSON();
             return moment(date).format('LLL');
         }
     }
-})
-
+});

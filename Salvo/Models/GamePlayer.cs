@@ -48,7 +48,6 @@ namespace Salvo.Models
 
             List<string> salvoLocations = 
                 GetOponent()?.Salvos
-                    .Where(salvo => salvo.turn <= lastTurn)
                     .SelectMany(salvo => salvo.Locations)
                     .Select(salvoLoc => salvoLoc.Location).ToList();
 
