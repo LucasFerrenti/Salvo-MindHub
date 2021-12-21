@@ -48,7 +48,7 @@
                     }
                 })
                 .catch(error => {
-                    console.log(error.data);
+                    console.error(error);
                     this.modal.tittle = "Error " + error.status;
                     this.modal.message = error.data;
                     this.showModal(true);
@@ -81,7 +81,7 @@
                     }
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    console.error(error);
                     this.modal.tittle = "Error " + error.reponse.status;
                     this.modal.message = error.response.data;
                     this.showModal(true);
@@ -98,7 +98,7 @@
                     }
                 })
                 .catch(error => {
-                    console.log("error, código de estatus: " + error.response.status);
+                    console.error(error);
                     if (error.response.status == 401) {
                         this.modal.tittle = "Fallo de autenticacion";
                         this.modal.message = error.response.data;

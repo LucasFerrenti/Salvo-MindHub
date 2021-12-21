@@ -36,7 +36,6 @@ namespace Salvo.Controllers
                 var games = _gameRepository.GetAllGamesWithPlayers().Select(g => new GameDTO
                     {
                         Id = g.Id,
-                        //CreationDate = ZoneTime.Change(g.CreationDate, "Argentina Standard Time"),
                         CreationDate = g.CreationDate,
                         GamePlayers = g.GamePlayers.Select(gp => new GamePlayerDTO
                         {
@@ -49,7 +48,6 @@ namespace Salvo.Controllers
                                 User = gp.Player.Name
                             },
                             Point = gp.GetScore(),
-                            GameState = Enum.GetName(typeof(GameState), gp.GetGameState())
                         }).ToList()
                     }).ToList();
                 //get email
@@ -108,6 +106,7 @@ namespace Salvo.Controllers
                 var userClaim = User.FindFirst("Player");
                 var email = userClaim == null ? "Guest" : userClaim.Value;
                 Player player = _playerRepository.FindByEmail(email);
+                //get game
                 Game game = _gameRepository.FindById(Id);
 
                 //validations

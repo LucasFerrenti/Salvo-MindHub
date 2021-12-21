@@ -18,7 +18,6 @@
 </head>
 <body>
     <div id="app">
-        <!-- Image and text -->
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand" href="/index.html">
                 <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -30,18 +29,46 @@
             </div>
             <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
         </nav>
-        <div class="container  mt-3 mb-3">
+        <div v-if="playersCount < 2" class="row-sm-">
+            <div class="col text-right">
+                <div class="input-group mt-2" style=" max-width: 25%; min-width: 150px; display: inline-flex;">
+                    <button id="copyBTN" @click="copyJoin" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share-fill" viewBox="0 0 16 16">
+                            <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+                        </svg>
+                    </button>
+                    <input id="joinLink" v-model:value="joinLink" type="text" class="form-control" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="container mb-2 mt-2">
             <div class="row justify-content-center">
                 <div class="col-sm- ml-5 mr-5">
                     <h1 class="title mt-2 mb-1">Barcos</h1>
                     <div class="row justify-content-center">
                         <div class="shipsStatus w-100 rounded-lg" style="background-color: rgb(60, 157, 214);">
+                            <!--Ship Status-->
                             <div class="row justify-content-center">
-                                <span class="mx-2 m-1"><img id="CarrierIcon" src="img/carrierafloat.png"></span>
-                                <span class="mx-2 m-1"><img id="BattleShipIcon" src="img/battleshipafloat.png"></span>
-                                <span class="mx-2 m-1"><img id="SubmarineIcon" src="img/submarineafloat.png"></span>
-                                <span class="mx-2 m-1"><img id="DestroyerIcon" src="img/destroyerafloat.png"></span>
-                                <span class="mx-2 m-1"><img id="PatroalBoatIcon" src="img/patroalboatafloat.png"></span>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="PatroalBoatIcon" src="img/ships/patroalboat_on.png">
+                                    <span class="game-text" style="font-size: 13px; color: white;">Patroal boat</span>
+                                </div>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="DestroyerIcon" src="img/ships/destroyer_on.png">
+                                    <span class="game-text" style="font-size: 13px; color: white;">Destroyer</span>
+                                </div>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="BattleShipIcon" src="img/ships/battleship_on.png">
+                                    <span class="game-text" style="font-size: 13px; color: white;">Battleship</span>
+                                </div>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="CarrierIcon" src="img/ships/carrier_on.png"></span>
+                                    <span class="game-text" style="font-size: 13px; color: white;">Carrier</span>
+                                </div>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="SubmarineIcon" src="img/ships/submarine_on.png"></span>
+                                    <span class="game-text" style="font-size: 13px; color: white;">Submarine</span>
+                                </div>                             
                             </div>                              
                         </div>
                     </div>                    
@@ -53,7 +80,7 @@
                     </div>
                     <div class="row-sm- justify-content-center">
                         <div v-if="gameView.ships && gameView.ships.length < 5" class="btn-place text-center" @click="placeShips()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-geo-alt-fill mt-2 title" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-geo-alt-fill mt-2 title" viewBox="0 0 16 16">
                                 <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
                             </svg>
                         </div>
@@ -67,13 +94,29 @@
                     <h1 class="title mt-2 mb-1">Salvos</h1>
                     <div class="row-sm- justify-content-center">
                         <div class="shipsStatus w-100 rounded-lg" style="background-color: rgb(60, 157, 214);">
+                            <!--Opponet Ships Status-->
                             <div class="row justify-content-center">
-                                <span class="mx-2 m-1"><img id="OpponentCarrierIcon" src="img/carrierafloat.png"></span>
-                                <span class="mx-2 m-1"><img id="OpponentBattleShipIcon" src="img/battleshipafloat.png"></span>
-                                <span class="mx-2 m-1"><img id="OpponentSubmarineIcon" src="img/submarineafloat.png"></span>
-                                <span class="mx-2 m-1"><img id="OpponentDestroyerIcon" src="img/destroyerafloat.png"></span>
-                                <span class="mx-2 m-1"><img id="OpponentPatroalBoatIcon" src="img/patroalboatafloat.png"></span>
-                            </div>   
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="OpponentPatroalBoatIcon" src="img/ships/patroalboat_on.png">
+                                    <span class="game-text" style="font-size: 13px; color: white;">Patroal boat</span>
+                                </div>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="OpponentDestroyerIcon" src="img/ships/destroyer_on.png">
+                                    <span class="game-text" style="font-size: 13px; color: white;">Destroyer</span>
+                                </div>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="OpponentBattleShipIcon" src="img/ships/battleship_on.png">
+                                    <span class="game-text" style="font-size: 13px; color: white;">Battleship</span>
+                                </div>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="OpponentCarrierIcon" src="img/ships/carrier_on.png"></span>
+                                    <span class="game-text" style="font-size: 13px; color: white;">Carrier</span>
+                                </div>
+                                <div class="col-sm- text-center m-1">
+                                    <img class="boat-on" id="OpponentSubmarineIcon" src="img/ships/submarine_on.png"></span>
+                                    <span class="game-text" style="font-size: 13px; color: white;">Submarine</span>
+                                </div>                             
+                            </div> 
                         </div>
                     </div>
                               
@@ -259,7 +302,7 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-sm-">
+                <div class="col">
                     <div class="row">
                         <div class="col mx-3">
                             <table class="table table-sm table-dark table-striped table-borderless rounded-lg ">
@@ -292,11 +335,12 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </div>  
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="modal fade " id="infoModal" role="dialog" aria-labelledby="infoModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
                 <div class="modal-content text-center" style="border: none">

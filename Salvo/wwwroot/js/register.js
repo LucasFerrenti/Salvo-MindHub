@@ -23,9 +23,9 @@ var app = new Vue({
                 }
             })
             .catch(error => {
+                console.error(error);
                 this.modal.tittle = "error";
                 this.modal.message = error.data;
-                console.log(error.data);
                 this.showModal(true);
             });
     },
@@ -103,9 +103,9 @@ var app = new Vue({
                     result = res.data;
                 })
                 .catch(error => {
+                    console.error(error);
                     this.modal.tittle = "error";
                     this.modal.message = error.data;
-                    console.log(error.data);
                     this.showModal(true);
                 });
             if (result == true) {
@@ -185,7 +185,7 @@ var app = new Vue({
                     window.location.href = '/index.html?register=successed'
                 })
                 .catch(error => {
-                    console.log("error, código de estatus: " + error.response.status);
+                    console.error(error);
                     this.modal.tittle = "Error";
                     this.modal.message = error.response.data;
                     this.showModal(true);

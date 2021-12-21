@@ -61,21 +61,17 @@ namespace Salvo.Models
             int myShips = Ships.Count;
             int? opShips = opponent?.Ships.Count;
 
-            //place ships
-            if (myShips == 0)
-                return GameState.PLACE_SHIPS;
-
             //wait opponent
             if (opponent == null)
                 return GameState.WAITING_OPPONENT;
 
-            //wait opponent ships
-            if (opponent != null && opShips == 0)
-                return GameState.WAITING_OPPONENT_SHIPS;
+            //place ships
+            if (myShips == 0)
+                return GameState.PLACE_SHIPS;
 
-            //wait
-            if (opShips == null || opShips == 0)
-                return GameState.WAIT;
+            //wait opponent ships
+            if (opShips == 0)
+                return GameState.WAITING_OPPONENT_SHIPS;
 
             int myTurn = Salvos.Count;
             int opTurn = opponent.Salvos.Count;

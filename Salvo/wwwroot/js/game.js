@@ -63,6 +63,7 @@ var app = new Vue({
                     window.location.href = '/game.html?gp=' + gpId;
                 })
                 .catch(error => {
+                    console.error(error);
                     this.modal.tittle = "Error " + error.response.status;
                     this.modal.message = error.response.data;
                     this.injectHTML = "";
@@ -77,6 +78,7 @@ var app = new Vue({
                     window.location.href = '/game.html?gp=' + gpId;
                 })
                 .catch(error => {
+                    console.error(error);
                     this.modal.tittle = "Error " + error.response.status;
                     this.modal.message = error.response.data;
                     this.injectHTML = "";
@@ -94,7 +96,7 @@ var app = new Vue({
                     this.games = response.data.games;
                 })
                 .catch(error => {
-                    console.log(error.data);
+                    console.error(error);
                     this.modal.tittle = "Error " + error.status;
                     this.modal.message = error.data;
                     this.injectHTML = "";
@@ -153,7 +155,7 @@ var app = new Vue({
                     }
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    console.error(error);
                     this.modal.tittle = "Error " + error.response.status;
                     this.modal.message = error.response.data;
                     this.injectHTML = "";
@@ -171,7 +173,7 @@ var app = new Vue({
                     }
                 })
                 .catch(error => {
-                    console.log("error, código de estatus: " + error.response.status);
+                    console.error(error);
                     if (error.response.status == 401) {
                         this.modal.tittle = "Fallo de autenticacion";
                         this.modal.message = error.response.data;
@@ -205,6 +207,7 @@ var app = new Vue({
                     this.showModal(true);
                 })
                 .catch(error => {
+                    console.error(error);
                     this.modal.tittle = "Error en el Reenvio";
                     this.modal.message = error.response.data;
                     this.injectHTML = "";
@@ -248,7 +251,9 @@ var app = new Vue({
                     }
                 })
             })
+            scores.sort(function(a, b){return b.total - a.total});
             app.scores = scores;
+
         },
         getOpenGames: function (games) {
             let openGames = [];

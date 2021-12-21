@@ -7,79 +7,79 @@
 }
 
 .CarrierHorizontal{
-    background-image: url('../img/carrierhor.png');
+    background-image: url('../img/ships/carrier_x.png');
     background-size: contain;
 }
 
 .CarrierVertical {
-    background-image: url('../img/carrierver.png');
+    background-image: url('../img/ships/carrier_y.png');
     background-size: 100% 100%;
-    width: 37px !important;
+    width: 30px !important;
 }
 
 .PatroalBoatHorizontal {
-    background-image: url('../img/patrolboathor.png');
+    background-image: url('../img/ships/patrolboat_x.png');
     background-size: contain;
-    min-width: 72px;
+    min-width: 60px;
 }
 
 .PatroalBoatVertical {
-    background-image: url('../img/patrolboatver.png');
+    background-image: url('../img/ships/patrolboat_y.png');
     background-size: 100% 100%;
-    width: 37px !important;
+    width: 30px !important;
 }
 
 .SubmarineHorizontal {
-    min-width: 111px;
-    background-image: url('../img/submarinehor.png');
+    min-width: 90px;
+    background-image: url('../img/ships/submarine_x.png');
     background-size: contain;
 }
 
 .SubmarineVertical {
-    background-image: url('../img/submarinever.png');
+    background-image: url('../img/ships/submarine_y.png');
     background-size: 100% 100%;
-    width: 37px !important;
+    width: 30px !important;
 }
 
 .DestroyerHorizontal {
-    min-width: 111px;
-    background-image: url('../img/destroyerhor.png');
+    min-width: 90px;
+    background-image: url('../img/ships/destroyer_x.png');
     background-size: contain;
 }
 
 .DestroyerVertical {
-    background-image: url('../img/destroyerver.png');
+    background-image: url('../img/ships/destroyer_y.png');
     background-size: 100% 100%;
-    width: 37px !important;
+    width: 30px !important;
 }
 
 .BattleShipHorizontal {
-    min-width: 148px;
-    background-image: url('../img/battleshiphor.png');
+    min-width: 120px;
+    background-image: url('../img/ships/battleship_x.png');
     background-size: contain;
 }
 
 .BattleShipVertical {
-    background-image: url('../img/battleshipver.png');
+    background-image: url('../img/ships/battleshipv_y.png');
     background-size: 100% 100%;
-    width: 37px !important;
+    width: 30px !important;
 }
 
 .grid-ships {
-    width: 407px!important;
-    height: 407px!important;
-    background-image: url(../img/grid-bkg.png);
+    width: 330px!important;
+    height: 330px!important;
+    background-image: url(../img/table-background.png);
     background-size: contain;
-    padding-left: 37px;
-    padding-top: 37px;
+    padding-left: 30px;
+    padding-top: 30px;
     position: relative;
 }
 
 .salvo-table{
-    background-image: url('../img/grid-bkg.png');
+    background-image: url('../img/table-background.png');
     background-size: contain;
-    width: 407px!important;
-    height: 407px!important;
+    width: 330px!important;
+    height: 330px!important;
     font-family: 'PT Sans', sans-serif;
 }
 
@@ -95,8 +95,8 @@
 
 .salvo-table th, .salvo-table td {
     /* border: solid black 1px; */
-    width: 37px;
-    height: 37px;
+    width: 30px;
+    height: 30px;
     text-align: center;
 }
 
@@ -107,8 +107,8 @@
 
 .hitSelf {
     position: absolute;
-    width: 37px;
-    height: 37px;
+    width: 30px;
+    height: 30px;
     background-image: url('../img/hit3.gif');
     background-size: contain;
 }
@@ -137,17 +137,15 @@
 
 .shipsStatus{
     background-color: #3b7ad3;
-    max-width: 407px;
+    max-width: 330px;
 }
 
 .btn-shoot{
     position: absolute;
-    max-width: 37px;
-    max-height: 37px;
-    min-width: 37px;
-    min-height: 37px;
+    width: 30px !important;
+    height: 30px !important;
     background-color: #bb2f3d;
-    border-radius: 20px;
+    border-radius: 15px;
     font-family: 'PT Sans', sans-serif;
     transition: background-color .3s;
 }
@@ -157,12 +155,10 @@
 .btn-place{
     z-index: 100;
     position: absolute;
-    max-width: 37px;
-    max-height: 37px;
-    min-width: 37px;
-    min-height: 37px;
+    width: 30px !important;
+    height: 30px !important;
     background-color: #1d975e;
-    border-radius: 20px;
+    border-radius: 15px;
     font-family: 'PT Sans', sans-serif;
     transition: background-color .3s;
     color: wheat;
@@ -171,7 +167,7 @@
     background-color: #25bb75;
 }
 .salvo.h5:not(.shoot ):not(.shooted){
-    border-radius: 20px;
+    border-radius: 15px;
     opacity: 30%;
     transition: background-color 0.3s;
 }

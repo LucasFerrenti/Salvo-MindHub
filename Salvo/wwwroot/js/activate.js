@@ -29,13 +29,13 @@ var app = new Vue({
                     this.result = resp.data;
             })
             .catch(error =>{
+                console.error(error);
                 this.modal.tittle = "Error " + error.response.status;
                 this.modal.message = error.response.data;
-                console.log(error.response.data);
                 $("#infoModal").modal('show');
             })
     },
     methods: {
-
+        
     }
 })

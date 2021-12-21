@@ -14,6 +14,8 @@ var app = new Vue({
             tittle: "",
             message: ""
         },
+        joinLink:"",
+        playersCount: 0
     },
     mounted() {
         $("#logout-btn").hide();
@@ -21,22 +23,32 @@ var app = new Vue({
             .then(response => {
                 this.gameView = response.data;
                 if(response.data[0] == "<"){
+                    console.error(response);
                     this.modal.tittle = "Sesion caducada";
                     this.modal.message = "Inicie sesion nuevamente para continuar"
                     this.showModal(true)
                     return
                 }
-                var static = this.gameView.ships && this.gameView.ships.length > 0;
-                getPlayers(this.gameView, gpId);
-                initializeGrid(this.gameView, static);
-                placeShips(this.gameView.ships);
-                if (!static)
-                    addEventsShips();
-                else
-                    addEventsSalvo();
-                this.getGameData();
+                try{
+                    var static = this.gameView.ships && this.gameView.ships.length > 0;
+                    getPlayers(this.gameView, gpId);
+                    initializeGrid(this.gameView, static);
+                    placeShips(this.gameView.ships);
+                    if (!static)
+                        addEventsShips();
+                    else
+                        addEventsSalvo();
+                    this.getGameData();
+                }
+                catch (error){
+                    console.error(error);
+                    this.modal.tittle = "Error";
+                    this.modal.message = error;;
+                    this.showModal(true);
+                }
             })
             .catch(error => {
+                console.error(error);
                 if (error.status == undefined){
                     this.modal.tittle = "Error de autorizacion";
                     this.modal.message = "Permisos insuficientes";
@@ -51,25 +63,28 @@ var app = new Vue({
     },
     methods: {
         getGameData: function () {
-            if (this.gameView.gameState == 'ENTER_SALVO') {
+            //set salvos
+            if (this.gameView.gameState == 'ENTER_SALVO')
                 app.salvoCount = 0;
-            }
-            else {
+            else
                 app.salvoCount = 5;
-            }
+            //render game info
             placeSalvos(this.gameView.salvos, this.player.id, this.gameView.ships);
             placeSinksShips(this.gameView.sunks, this.gameView.sunksOpponent);
             placeHits(this.gameView.hits);
             this.gameState = getGameState(this.gameView.gameState);
-            if (this.gameView.gameState == 'WAIT') {
-                if (this.interval == null) {
+            let = waitStates = ["WAITING_OPPONENT","WAIT","WAITING_OPPONENT_SHIPS"]
+            if (waitStates.includes(this.gameView.gameState)) {
+                if (this.interval == null) 
                     this.interval = setInterval(this.refresh, 10000);
-                }
             }
             else {
                 clearInterval(this.interval);
                 this.interval = null;
             }
+            //share box
+            this.playersCount = this.gameView.gamePlayers.length;
+            this.joinLink = "https://" + location.host + "/join.html?game=" + this.gameView.gameId;
         },
         refresh: function () {
             axios.get('/api/gamePlayers/' + gpId)
@@ -86,7 +101,7 @@ var app = new Vue({
                     }
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    console.error(error);
                     this.modal.tittle = "Error " + error.response.status;
                     this.modal.message = error.response.data;
                     this.showModal(true);
@@ -131,7 +146,7 @@ var app = new Vue({
                     window.location.reload();
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    console.error(error);
                     this.modal.tittle = "Error " + error.response.status;
                     this.modal.message = error.response.data;
                     this.showModal(true);
@@ -163,10 +178,11 @@ var app = new Vue({
                     app.refresh();
                 })
                 .catch(error => {
+                    console.error(error);
                     this.modal.tittle = "Error " + error.response.status;
                     this.modal.message = error.response.data;
                     this.showModal(true);
-                    app.salvoCount = 0
+                    app.salvoCount = 0;
                 });
         },
         showModal: function (show) {
@@ -175,6 +191,11 @@ var app = new Vue({
             else
                 $("#infoModal").modal('hide');
         },
+        copyJoin(){
+            $content = document.getElementById('joinLink');
+            $content.select();
+            document.execCommand('copy');
+        }
     }
 })
 
@@ -195,7 +216,7 @@ function initializeGrid(gameview, static) {
         //separacion entre elementos (les llaman widgets)
         verticalMargin: 0,
         //altura de las celdas
-        cellHeight: 37,
+        cellHeight: 30,
         //desabilitando el resize de los widgets
         disableResize: true,
         //widgets flotantes
@@ -294,8 +315,8 @@ function placeSalvos(salvos, playerId, ships) {
                     location.location = location.location.replace(/I/g, '8');
                     location.location = location.location.replace(/J/g, '9');
 
-                    var yInGrid = (parseInt(location.location.slice(0, 1)) * 37) + 37;
-                    var xInGrid = ((parseInt(location.location.slice(1, 3)) - 1) * 37) + 37;
+                    var yInGrid = (parseInt(location.location.slice(0, 1)) * 30) + 30;
+                    var xInGrid = ((parseInt(location.location.slice(1, 3)) - 1) * 30) + 30;
                     $('.grid-ships').append('<div class="hitSelf" style="top:' + yInGrid + 'px; left:' + xInGrid + 'px;" ></div>');
                 }
             })
@@ -360,11 +381,11 @@ function placeHits(playerHits) {
 function placeSinksShips(playerSunks, opponentSunks) {
     if (playerSunks != null)
         playerSunks.forEach(function (sunk) {
-            $("#" + sunk + "Icon").attr("src", "img/" + sunk.toLowerCase() + "sunk.png");
+            $("#" + sunk + "Icon").attr("src", "img/ships/" + sunk.toLowerCase() + "_off.png");
         })
     if (opponentSunks != null)
         opponentSunks.forEach(function (sunk) {
-            $("#Opponent" + sunk + "Icon").attr("src", "img/" + sunk.toLowerCase() + "sunk.png");
+            $("#Opponent" + sunk + "Icon").attr("src", "img/ships/" + sunk.toLowerCase() + "_off.png");
         })
 }
 

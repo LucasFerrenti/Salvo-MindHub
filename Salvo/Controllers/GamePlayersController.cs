@@ -41,6 +41,7 @@ namespace Salvo.Controllers
                 var gameView = new GameViewDTO
                 {
                     Id = gp.Id,
+                    GameId = gp.GameID,
                     CreationDate = gp.Game.CreationDate,
                     GamePlayers = gp.Game.GamePlayers.Select(gps => new GamePlayerDTO
                     {

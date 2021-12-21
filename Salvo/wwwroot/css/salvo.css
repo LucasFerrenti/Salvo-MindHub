@@ -1,7 +1,7 @@
 ﻿body {
     background-image: url('../img/battleship.png');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: auto;
     background-color: rgb(52, 58, 64);
 }
 
@@ -49,35 +49,35 @@
 }
 
 .img-state-wait {
-    background-image: url(../img/wait.gif);
+    background-image: url(../img/game_states/wait.gif);
 }
 
 .img-state-ship {
-    background-image: url(../img/place_ship.gif);
+    background-image: url(../img/game_states/place_ship.gif);
 }
 
 .img-state-fire {
-    background-image: url(../img/fire.gif);
+    background-image: url(../img/game_states/fire.gif);
 }
 
 .img-state-win {
-    background-image: url(../img/win.gif);
+    background-image: url(../img/game_states/win.gif);
 }
 
 .img-state-loss {
-    background-image: url(../img/loss.gif);
+    background-image: url(../img/game_states/loss.gif);
 }
 
 .img-state-tie {
-    background-image: url(../img/tie.gif);
+    background-image: url(../img/game_states/tie.gif);
 }
 
 .img-state-wait-opponent{
-    background-image: url(../img/wait-opponent.gif);
+    background-image: url(../img/game_states/wait_opponent.gif);
 }
 
 .img-state-wait-opponent-ships {
-    background-image: url(../img/wait-opponent-ships.gif);
+    background-image: url(../img/game_states/wait_opponent_ships.gif);
 }
 
 .title {
@@ -138,12 +138,11 @@
 
 .up-enter-active, .up-leave-active {
     overflow: hidden;
-    animation-delay: 1s;
+
     animation: up 2s;
 }
-.up-enter, .up-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.up-enter, .up-leave-to{
     overflow: hidden;
-    animation-delay: 1s;
     animation: down 0.6s;
 }
 
@@ -206,5 +205,17 @@
   }
   .resend-text:hover{
     color: rgb(53, 174, 255);
+  }
+
+  #joinLink::selection{
+      background-color: transparent;
+      outline: none;
+  }
+  .boat-on{
+      height: 30px !important;
+      width: auto;
+      display: block;
+      margin: auto;
+      margin-bottom: -8px;
   }
 
